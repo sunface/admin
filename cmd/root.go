@@ -17,8 +17,17 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/signal"
+	"strings"
+	"syscall"
 
+	"github.com/mafanr/admin/service"
+
+	"github.com/mafanr/admin/misc"
+
+	"github.com/mafanr/g"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 var cfgFile string
@@ -31,11 +40,26 @@ var rootCmd = &cobra.Command{
 examples and usage of using your application. For example:
 
 Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
+This application is a tool to generate the needed files  
 to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		misc.InitConfig("admin.conf")
+		misc.Conf.Common.LogLevel = strings.ToLower(misc.Conf.Common.LogLevel)
+		g.InitLogger()
+		g.L.Info("当前服务版本号", zap.String("version", misc.Conf.Common.Version))
+
+		a := &service.Admin{}
+		a.Start()
+
+		// 等待服务器停止信号
+		chSig := make(chan os.Signal)
+		signal.Notify(chSig, syscall.SIGINT, syscall.SIGTERM)
+
+		sig := <-chSig
+		g.L.Info("tfe收到关闭信号", zap.Any("signal", sig))
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

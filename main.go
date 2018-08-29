@@ -14,7 +14,7 @@
 
 package main
 
-import "admin/cmd"
+import "github.com/mafanr/admin/cmd"
 
 func main() {
 	cmd.Execute()
