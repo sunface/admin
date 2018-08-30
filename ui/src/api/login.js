@@ -12,9 +12,9 @@ export function logout(token) {
   })
 }
 
-export function getUserInfo(token) {
+export function getLoginInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/login/info',
     method: 'get',
     params: { token },
     withCredentials: true

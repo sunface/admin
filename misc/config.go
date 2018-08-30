@@ -34,6 +34,14 @@ type Config struct {
 	Etcd struct {
 		Addrs []string
 	}
+
+	Mysql struct {
+		Addr     string
+		Port     string
+		Database string
+		Acc      string
+		Pw       string
+	}
 }
 
 var Conf *Config

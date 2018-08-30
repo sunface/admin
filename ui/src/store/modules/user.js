@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import {logout } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -51,9 +51,9 @@ const user = {
     // SSO登陆成功，保存信息
     SetUserInfo({ commit,state},userInfo) {
       return new Promise(resolve => {
-        setToken(userInfo.ssoToken)
-        commit('SET_TOKEN', userInfo.ssoToken)
-        commit('SET_ROLES', userInfo.role)
+        setToken(userInfo.token)
+        commit('SET_TOKEN', userInfo.token)
+        commit('SET_ROLES', userInfo.priv)
         commit('SET_USER', userInfo.id)
         commit('SET_NAME', userInfo.name)
         commit('SET_AVATAR', userInfo.avatar)

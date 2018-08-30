@@ -7,8 +7,31 @@
         <h3 class="title">{{$t('login.title')}}</h3>
       </div>
 
+      <el-form-item prop="username">
+        <span class="svg-container svg-container_login">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" :placeholder="$t('login.username')"
+        />
+      </el-form-item>
+
+      <el-form-item prop="password">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input name="password" :type="passwordType" v-model="loginForm.password" autoComplete="on"
+          :placeholder="$t('login.password')" />
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon icon-class="eye" />
+        </span>
+      </el-form-item>
 
       <el-button type="primary" style="width:100%;margin-bottom:30px;"  @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
+
+      <div class="tips">
+        <span>{{$t('login.username')}} : admin</span>
+        <span>{{$t('login.password')}} : admin</span>
+      </div>
     </el-form>
 
   </div>
@@ -17,18 +40,39 @@
 <script>
 /* eslint-disable */
 const config = require('@/../config')
-
+import request from '@/utils/request' 
 export default {
   name: 'login',
   data() {
     return {
+      passwordType: 'password',
+      loginForm:{}
     }
   },
   methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+    },
     handleLogin() {
-      let host = "tfe.tf56.lo"
-      let url = "http://sitetest.tf56.com/openssoWeb/opensso/login?clientNo=1" + "&redirectUrl=http://" + host + "/callback"
-      window.location.href = url
+      var _this = this
+      // 登陆
+      request({
+          url: '/login',
+          method: 'POST', 
+          params: {
+            user: this.loginForm.username,
+            pw: this.loginForm.password
+          }
+      }).then(response => {
+          _this.$store.dispatch('SetUserInfo', response.data.data).then(() => {  
+              _this.$router.push({ path: '/' })
+          })
+      }).catch(error => {
+      })
     }
   },
   created() {

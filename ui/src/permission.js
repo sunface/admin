@@ -6,7 +6,7 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { getToken } from '@/utils/auth' // getToken from cookie
-import {getUserInfo} from '@/api/login'
+import {getLoginInfo} from '@/api/login'
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
@@ -17,7 +17,7 @@ function hasPermission(roles, permissionRoles) {
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
 
-const whiteList = ['/login','/callback']// no redirect whitelist
+const whiteList = ['/login']// no redirect whitelist
 
 router.beforeEach((to, _, next) => {
   NProgress.start() // start progress bar
@@ -25,13 +25,13 @@ router.beforeEach((to, _, next) => {
 
   if (getToken()) { // determine if there has token
     /* has token*/
-    if (to.path === '/login' || to.path === '/callback') {
+    if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.name == '') {
         // 刷新后导致state信息不存在，重新初始化
-        getUserInfo().then((res) => {
+        getLoginInfo().then((res) => {
           // 设置用户信息
           store.dispatch('SetUserInfo', res.data.data)
             // 判断用户信息是否存在，不存在则需要加载

@@ -27,7 +27,6 @@ import Layout from '@/views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '/callback', component: () => import('@/views/login/callback'), hidden: true },
   { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
   { path: '/401', component: () => import('@/views/errorPage/401'), hidden: true },
   {
@@ -55,7 +54,7 @@ export const asyncRouterMap = [
     path: '/services',
     name: 'services',
     component: Layout,
-    meta: { title: '应用列表', icon: 'table', noCache: true },
+    meta: { title: 'Services', icon: 'table', noCache: true },
     children: [
       {
         path: 'tfe',
@@ -119,6 +118,26 @@ export const asyncRouterMap = [
         ]
       }
     ]
+  },
+  {
+    path: '/users',
+    component: Layout,
+    children: [{
+      path: '',
+      component: () => import('@/views/users'),
+      name: 'users',
+      meta: { title: 'Users', icon: 'user', noCache: true }
+    }]
+  },
+  {
+    path: '/setting',
+    component: Layout,
+    children: [{
+      path: '',
+      component: () => import('@/views/setting'),
+      name: 'setting',
+      meta: { title: 'Setting', icon: 'eye', noCache: true }
+    }]
   },
   // {
   //   path: '/tools',

@@ -6,10 +6,10 @@ import (
 
 	"github.com/mafanr/admin/misc"
 
-	"github.com/mafanr/g"
-
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/mafanr/g"
 	"go.uber.org/zap"
 )
 
@@ -18,6 +18,14 @@ type Admin struct {
 }
 
 func (a *Admin) Start() {
+	g.L.Info("start mafanr admin")
+
+	// 初始化mysql连接
+	g.InitMysql(misc.Conf.Mysql.Acc, misc.Conf.Mysql.Pw, misc.Conf.Mysql.Addr, misc.Conf.Mysql.Port, misc.Conf.Mysql.Database)
+
+	// 初始化超级管理员
+	a.InitSuperAdmin()
+
 	// 查询所有service的服务节点状态
 	go queryServices()
 
@@ -39,10 +47,16 @@ func (a *Admin) listen() {
 
 	// sso登陆和session相关
 	e.POST("/login", a.login, timing)
-	e.POST("/login/mock", a.loginMock, timing)
 	e.POST("/logout", a.logout, timing)
-	e.GET("/user/info", a.userInfo, timing)
+	e.GET("/login/info", a.loginInfo, timing)
 
+	// 用户相关
+	e.POST("/user/add", a.AddUser, timing)
+	e.POST("/user/edit", a.EditUser, timing)
+	e.POST("/user/delete", a.DeleteUser, timing)
+	e.GET("/user/load", a.LoadUsers, timing)
+	e.POST("/user/setPW", a.SetPW, timing)
+	e.POST("/user/setUserPW", a.SetUserPW, timing)
 	// tools
 	e.POST("/tools/praise", a.genPraise, timing)
 	e.POST("/tools/testApi", a.testApi)

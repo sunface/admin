@@ -43,8 +43,8 @@ func (a *Admin) proxy(c echo.Context) error {
 		})
 	}
 	sess := sessI.(*Session)
-	args.Set("user_id", sess.User.ID)
-	args.Set("user_name", sess.User.Name)
+	args.Set("user_id", sess.LoginInfo.ID)
+	args.Set("user_name", sess.LoginInfo.Name)
 
 	// 设置admin token
 	args.Set("admin_token", misc.Conf.Common.Token)
@@ -66,7 +66,7 @@ func (a *Admin) proxy(c echo.Context) error {
 	args.Set("app_role", g.ROLE_NORMAL)
 	aa, ok := AppAdmins[srv]
 	if ok {
-		role, ok1 := aa[sess.User.ID]
+		role, ok1 := aa[sess.LoginInfo.ID]
 		if ok1 {
 			args.Set("app_role", role)
 		}
