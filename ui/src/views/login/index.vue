@@ -20,7 +20,7 @@
           <svg-icon icon-class="password" />
         </span>
         <el-input name="password" :type="passwordType" v-model="loginForm.password" autoComplete="on"
-          :placeholder="$t('login.password')" />
+          :placeholder="$t('login.password')" @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span>

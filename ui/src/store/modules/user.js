@@ -55,7 +55,7 @@ const user = {
         commit('SET_TOKEN', userInfo.token)
         commit('SET_ROLES', userInfo.priv)
         commit('SET_USER', userInfo.id)
-        commit('SET_NAME', userInfo.name)
+        commit('SET_NAME', userInfo.username)
         commit('SET_AVATAR', userInfo.avatar)
         resolve()
       })

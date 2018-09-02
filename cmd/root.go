@@ -21,7 +21,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/mafanr/admin/service"
+	"github.com/mafanr/admin/admin"
 
 	"github.com/mafanr/admin/misc"
 
@@ -50,7 +50,7 @@ to quickly create a Cobra application.`,
 		g.InitLogger()
 		g.L.Info("当前服务版本号", zap.String("version", misc.Conf.Common.Version))
 
-		a := &service.Admin{}
+		a := &admin.Admin{}
 		a.Start()
 
 		// 等待服务器停止信号

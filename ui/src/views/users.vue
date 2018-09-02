@@ -39,8 +39,8 @@
 
           <el-form-item label="privilege">
             <el-select class="filter-item" v-model="tempCreate.priv" style="width: 200px"  placeholder="select priv">
-              <el-option label="admin" value="admin"></el-option>
               <el-option label="normal" value="normal"></el-option>
+              <el-option label="admin" value="admin"></el-option>
             </el-select>
           </el-form-item>
            <el-alert
@@ -111,7 +111,7 @@ export default {
           }
       }).then(res => {
         this.$message({
-          message: '编辑用户成功',
+          message: 'edit user ok',
           type: 'success',
           duration: 3 * 1000,
           center: true
@@ -139,7 +139,7 @@ export default {
           }
       }).then(res => {
         this.$message({
-          message: '添加用户成功',
+          message: 'add user ok',
           type: 'success',
           duration: 3 * 1000,
           center: true
@@ -169,7 +169,7 @@ export default {
               this.users = res.data.data
             })
             this.$message({
-              message: '删除用户成功',
+              message: 'delete user ok',
               type: 'success',
               duration: 3 * 1000,
               center: true

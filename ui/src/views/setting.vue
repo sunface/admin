@@ -22,7 +22,7 @@
             <div class="form-block" style="padding:15px 15px" v-if="priv=='admin' || priv=='super_admin'">
               <el-tag  size="large" style="border:none;font-size:14px">Set user's pw</el-tag>
               <el-form-item label="username" style="margin-top:25px">
-                <el-select class="filter-item" v-model="resetUsername" style="width: 200px"  placeholder="select user">
+                <el-select class="filter-item" v-model="resetUsername" style="width: 200px"  placeholder="select user" filterable>
                   <el-option v-for="u in users" :key="u.id" :label="u.username" :value="u.username"></el-option>
                 </el-select>
                 </el-form-item>
