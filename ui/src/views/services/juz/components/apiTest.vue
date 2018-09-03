@@ -5,7 +5,7 @@
             {{api.api_id}}
         </el-form-item>
 
-        <el-form-item label="目标地址"  style="width:300px">
+        <el-form-item label="Backend URL"  style="width:300px">
             {{api.route_addr}}
         </el-form-item>
         
@@ -18,33 +18,33 @@
             </el-select>
         </el-form-item>
 
-        <el-form-item label="TFE地址" style="width:400px">
+        <el-form-item label="JUZ API Address" style="width:400px">
             {{tfeAddr}}
         </el-form-item>
 
 
-        <el-form-item label="请求参数" style="width:600px">
-            <el-input type="textarea" :autosize="{ minRows: 6, maxRows: 8}" placeholder="测试结果展示" :value="makeParam(testParams)" :disabled=true>
+        <el-form-item label="Params" style="width:600px">
+            <el-input type="textarea" :autosize="{ minRows: 6, maxRows: 8}" :value="makeParam(testParams)" :disabled=true>
             </el-input>
         </el-form-item>
-        <el-form-item label="添加参数">
-            <el-input  placeholder="新参数" style="width:150px" v-model="tempKey">
+        <el-form-item label="Add Param">
+            <el-input   style="width:150px" v-model="tempKey">
                 <template slot="prepend">Key</template>
             </el-input>
-            <el-input  placeholder="新参数" style="width:150px" v-model="tempVal">
+            <el-input  style="width:150px" v-model="tempVal">
                 <template slot="prepend">Val</template>
             </el-input>
-            <el-button @click="addParam" type="success" size="medium">添加</el-button>
-            <el-button @click="clearParam" type="warning" size="medium">清空</el-button>
+            <el-button @click="addParam" type="success" size="medium">Add</el-button>
+            <el-button @click="clearParam" type="warning" size="medium">Clear All</el-button>
         </el-form-item>
 
-        <el-form-item label="具体输出" style="width:600px">
-            <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 12}" placeholder="测试结果展示" v-model="testResult" :disabled=true>
+        <el-form-item label="Output" style="width:600px">
+            <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 12}" placeholder="Test Result" v-model="testResult" :disabled=true>
             </el-input>
         </el-form-item>
 
         <el-form-item>
-            <el-button type="success"  @click="startTest()">开始测试</el-button>
+            <el-button type="success"  @click="startTest()">Start</el-button>
         </el-form-item>    
     </el-form>
   </div>

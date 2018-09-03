@@ -60,7 +60,7 @@ export default {
   methods:{
     createLabel() {
         var params = {
-            target_service: 'tfe.manage',
+            target_app: 'tfe.manage',
             target_path: '/manage/labels/create',
             service: this.selectedService,
             name: this.tempLabel
@@ -115,7 +115,7 @@ export default {
     loadLabels() {
        //加载审计日志
         var params = {
-            target_service: 'tfe.manage',
+            target_app: 'tfe.manage',
             target_path: '/manage/labels/query',
             service: this.selectedService
         }
@@ -126,7 +126,7 @@ export default {
     loadServices() {
       // 加载该用户的所有service
         var params = {
-                target_service: 'tfe.manage',
+                target_app: 'tfe.manage',
                 target_path: '/manage/service/query',
             }
         proxy('POST',params).then(res => {

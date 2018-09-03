@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        <el-select  class="filter-item" v-model="selectedService" @change='handleSelService' style="width: 200px"  placeholder="请选择Service">
+        <el-tag>select service</el-tag>
+        <el-select  class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="Selete a service">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>
         </el-select>
@@ -20,11 +21,12 @@
 /* eslint-disable */
 import {proxy} from '@/api/apiProxy'
 import auditLog from './components/auditLog'
+import request from '@/utils/request' 
 export default {
   name: 'auditLogs',
   data() {
       return {
-        services: [{name:'全部'}],
+        services: [{name:'All'}],
         totalLogs: 0,
         logs: [],
         sName : '',
@@ -36,9 +38,12 @@ export default {
   },
   components:{auditLog},
   methods :{
+    calcService() {
+        return this.selectedService
+    },
     handleSelService(val) {
        this.selectedService = val
-       if (val=='全部') {
+       if (val=='All') {
          this.sName = this.genAllService(this.services)
        } else {
          this.sName = "'"+val+"'"
@@ -48,7 +53,7 @@ export default {
     loadLogs(service) {
       //加载审计日志
       var params = {
-          target_service: 'tfe.manage',
+          target_app: 'tfe.manage',
           target_path: '/manage/auditLog/count',
           target_type: 0,
           target_id: service
@@ -58,7 +63,7 @@ export default {
       })
 
       var params = {
-          target_service: 'tfe.manage',
+          target_app: 'tfe.manage',
           target_path: '/manage/auditLog/load',
           target_type: 0,
           target_id: service,
@@ -81,21 +86,16 @@ export default {
       return s
     },
     loadServices() {
-      // 加载该用户的所有service
-        var params = {
-                target_service: 'tfe.manage',
-                target_path: '/manage/service/query',
-            }
-        proxy('POST',params).then(res => {
-           if (res.data.status == 200) {
-             this.selectedService = '全部'
-             for (var i=0;i<res.data.data.length;i++) {
-               this.services.push(res.data.data[i])
-             }
-            
+       request({
+          url: '/infra/service/query',
+          method: 'GET', 
+          params: {
+          }
+        }).then(res => {
+            this.services = res.data.data
+            this.selectedService = 'All'
              this.sName = this.genAllService(res.data.data)
              this.loadLogs(this.sName)
-           }
         })
     }
   },

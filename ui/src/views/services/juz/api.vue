@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        
-        <el-select clearable class="filter-item" v-model="selectedService" @change='handleSelService' style="width: 200px"  placeholder="请选择Service">
+        <el-tag>select service</el-tag>
+        <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 160px"  placeholder="请选择Service">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>
         </el-select>
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="primary" icon="el-icon-edit">创建API</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="primary" icon="el-icon-edit">Create API</el-button>
 
        
 
         <span style="float:right;margin-right:30px">
-          <el-button class="filter-item"  @click="batchRelease"  v-waves icon="el-icon-upload2">批量发布</el-button>
-          <el-button class="filter-item" style="margin-right: 20px;" @click="handleBatchStrategy"  v-waves icon="el-icon-bell">批量设置策略</el-button>
-          <el-input  style="width: 250px;" class="filter-item" placeholder="模糊查询" v-model="q" clearable @clear="loadApis(1)" @keyup.enter.native="loadApis(1)" >
+          <el-button class="filter-item"  @click="batchRelease"  v-waves icon="el-icon-upload2">Batch Release</el-button>
+          <el-button class="filter-item" style="margin-right: 20px;" @click="handleBatchStrategy"  v-waves icon="el-icon-bell">Batch Strategy</el-button>
+          <el-input  style="width: 250px;" class="filter-item" placeholder="fuzzing search" v-model="q" clearable @clear="loadApis(1)" @keyup.enter.native="loadApis(1)" >
           </el-input>
           <el-button class="filter-item" type="success" v-waves icon="el-icon-search"   @click="loadApis(1)"></el-button>
         </span>
@@ -21,50 +21,44 @@
       </div>
 
       <div class="table">
-        <el-table  :data="apis"  fit highlight-current-row style="width: 100%;"  :default-sort = "{prop: 'gmt_modified', order: 'descending'}" @selection-change="selTableRows">
+        <el-table  :data="apis"  fit highlight-current-row style="width: 100%;"  :default-sort = "{prop: 'modify_date', order: 'descending'}" @selection-change="selTableRows">
            <el-table-column
             type="selection"
             width="55"> 
           </el-table-column>
-          <el-table-column align="left" label="API ID" width="210" prop="api_id">
+          <el-table-column align="left" label="api id" width="210" prop="api_id">
             <template slot-scope="scope">
               <span>{{scope.row.api_id}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="left" label="路径映射" width="100" prop="api_id">
-            <template slot-scope="scope">
-              <span v-if="scope.row.path_type==0">否</span>
-              <span v-else>是</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="left" label="API名" width="160">
+          <el-table-column align="left" label="api name" width="160">
             <template slot-scope="scope">
               <span>{{showName(scope.row.api_id)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="left" label="版本号" width="80">
+          <el-table-column align="left" label="version" width="80">
             <template slot-scope="scope">
               <span>{{showVersion(scope.row.api_id)}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="300" align="left" label="目标地址" prop="route_addr">
+          <el-table-column width="300" align="left" label="target url" prop="route_addr">
             <template slot-scope="scope">
               <span>{{scope.row.route_addr}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="250" align="left" label="发布状态" >
+          <el-table-column width="250" align="left" label="status" >
              <template slot-scope="scope">
-                <div><el-tag type="success" size="mini">编辑版本</el-tag> <span style="color:#337ab7;font-size:13px;">{{scope.row.revise_version}}</span></div>
-                <div v-if="scope.row.release_version!=''" style="margin-top:3px"><el-tag  size="mini" :type="calcRelease(scope.row)">发布版本</el-tag>  <span style="color:#337ab7;font-size:13px;">{{scope.row.release_version}}</span></div>
-                <div v-else style="margin-top:3px"><el-tag type="warning" size="mini">尚未发布</el-tag></div>
+                <div><el-tag type="success" size="mini">editVer</el-tag> <span style="color:#337ab7;font-size:13px;">{{scope.row.revise_version}}</span></div>
+                <div v-if="scope.row.release_version!=''" style="margin-top:3px"><el-tag  size="mini" :type="calcRelease(scope.row)">releaseVer</el-tag>  <span style="color:#337ab7;font-size:13px;">{{scope.row.release_version}}</span></div>
+                <div v-else style="margin-top:3px"><el-tag type="warning" size="mini">not released</el-tag></div>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
+          <el-table-column align="center" label="operate" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button  v-if="scope.row.release_version!=scope.row.revise_version && scope.row.release_version!=''" type="text" @click="releaseAPI(scope.row)">重新发布</el-button>
-              <el-button  v-if="scope.row.release_version=='' " type="text" @click="releaseAPI(scope.row)">发布上线</el-button>
-              <el-button  type="text"  @click="handleManage(scope.row)">管理</el-button>
-              <el-button  class="green-button"  type="text" @click="handleCopy(scope.row,$event)">复制配置</el-button>
+              <el-button  v-if="scope.row.release_version!=scope.row.revise_version && scope.row.release_version!=''" type="text" @click="releaseAPI(scope.row)">release</el-button>
+              <el-button  v-if="scope.row.release_version=='' " type="text" @click="releaseAPI(scope.row)">release</el-button>
+              <el-button  type="text"  @click="handleManage(scope.row)">manage</el-button>
+              <el-button  class="green-button"  type="text" @click="handleCopy(scope.row,$event)">copy config</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -75,7 +69,7 @@
             :total="totalApis">
         </el-pagination>
       </div>
-      <el-dialog class="black-dialog" :title="'管理API ：'+tempApi.api_id" :visible.sync="apiManageVisible" top="40px"  :fullscreen=true style="backgroud:#545c64 !important"> 
+      <el-dialog class="black-dialog" :title="'Manage API ：'+tempApi.api_id" :visible.sync="apiManageVisible" top="40px"  :fullscreen=true style="backgroud:#545c64 !important"> 
           <el-row :gutter="20" style="margin-top:40px;">
             <el-col :span=3 :offset=1>
               <el-menu
@@ -89,24 +83,24 @@
                 >
                 <el-menu-item index="1">
                    <i class="el-icon-setting"></i> 
-                  <span slot="title">API定义</span>
+                  <span slot="title">API Define</span>
                 </el-menu-item>
                 <el-menu-item index="2">
                   <i class="el-icon-caret-right"></i>
-                  <span slot="title">API调试</span>
+                  <span slot="title">API Test</span>
                 </el-menu-item>
                 <el-menu-item index="3">
                    <i class="el-icon-menu"></i>
-                  <span slot="title">审计日志</span>
+                  <span slot="title">Audit Log</span>
                 </el-menu-item>
                 <el-menu-item index="4">
                    <i class="el-icon-bell"></i>
-                  <span slot="title">指标监控</span>
+                  <span slot="title">Metrics</span>
                 </el-menu-item>
-                <el-menu-item index="5">
+                <!-- <el-menu-item index="5">
                    <i class="el-icon-document"></i>
                   <span slot="title">API文档</span>
-                </el-menu-item>
+                </el-menu-item> -->
               </el-menu>
             </el-col>
             <el-col :span=20 :offset=0 style="color:#fff;padding-right:0;">
@@ -114,12 +108,12 @@
                 <div v-show="selectManageIndex==1">
                      <div style="width:85%">
                         <span style="float:right;margin-top:-36px">
-                          <el-button type="success" size="small" @click="handleEdit()">编辑</el-button>
-                          <el-button v-if="tempApi.release_version!=tempApi.revise_version && tempApi.release_version!=''" type="warning" size="small" @click="releaseAPI(tempApi)">重新发布</el-button>
-                          <el-button v-if="tempApi.release_version=='' " type="warning" size="small" @click="releaseAPI(tempApi)">发布上线</el-button>
+                          <el-button type="success" size="small" @click="handleEdit()">Edit</el-button>
+                          <el-button v-if="tempApi.release_version!=tempApi.revise_version && tempApi.release_version!=''" type="warning" size="small" @click="releaseAPI(tempApi)">Release</el-button>
+                          <el-button v-if="tempApi.release_version=='' " type="warning" size="small" @click="releaseAPI(tempApi)">Release</el-button>
                          
-                          <el-button v-show="tempApi.release_version!=''" type="info" size="small" @click="offlineAPI(tempApi)">下线</el-button>
-                           <el-button  type="" @click="delApi(tempApi)" size="small">删除</el-button>
+                          <el-button v-show="tempApi.release_version!=''" type="info" size="small" @click="offlineAPI(tempApi)">Offline</el-button>
+                           <el-button  type="" @click="delApi(tempApi)" size="small">Delete</el-button>
                         </span>
                         <apiDefine :api="tempApi" formType='black-form'></apiDefine>
                     </div>
@@ -145,19 +139,19 @@
 
       <el-dialog :title="apiTitle" :visible.sync="apiDefineVisible" top="40px" :before-close="cancelAPIDefine" :fullscreen=false> 
         <el-steps :active="apiDefineStep" finish-status="success">
-          <el-step title="API信息"></el-step>
-          <el-step title="请求设置"></el-step>
-          <el-step title="高级设置"></el-step>
+          <el-step title="Basic"></el-step>
+          <el-step title="Request"></el-step>
+          <el-step title="Advanced"></el-step>
         </el-steps>
 
         <el-row :gutter="20" style="margin-top:40px;">
             <el-col :span=20 :offset=2>
               <div v-show="apiDefineStep==0">
-                  <el-form label-position="left" label-width="70px" size="small">
+                  <el-form label-position="left" label-width="110px" size="small">
                     <el-form-item label="Service">
                       {{tempApi.service}}
                     </el-form-item>
-                    <el-form-item label="路径映射">
+                    <el-form-item label="URL Type">
                        <el-switch
                           v-model="tempApi.path_type"
                           active-color="#13ce66"
@@ -167,7 +161,14 @@
                         </el-switch>
                         <el-alert
                         :closable=false
-                        title="路径映射支持客户端直接通过http://yourip/a/b/c的形式进行访问,非路径映射是用http://yourip/service/api?api_name=xxx进行访问"
+                        v-if="tempApi.path_type==1"
+                        title="Client request with http://JUZ_IP/a/b/c"
+                        type="success">
+                      </el-alert> 
+                       <el-alert
+                        :closable=false
+                        v-else
+                        title="Client request with  http://JUZ_IP/service/api?api_name=abc&api_version=1"
                         type="success">
                       </el-alert> 
                     </el-form-item>
@@ -181,59 +182,59 @@
                         type="warning">
                       </el-alert>
                     </el-form-item>
-                    <el-form-item v-if="defineStatus=='create'" label="API名" prop="name" class="first-item">
+                    <el-form-item v-if="defineStatus=='create'" label="API Name" prop="name" class="first-item">
                       <span v-if="tempApi.path_type==0">{{tempApi.service}}.</span>
                       <el-tooltip class="no-border-input" :content="apiNameTooltip()" placement="top">
                           <el-input  v-model="tempApi.api_id" placeholder=""  style="width:250px">
                           </el-input>
                        </el-tooltip>
                     </el-form-item>
-                    <el-form-item v-else label="API名称" prop="name" class="first-item">
+                    <el-form-item v-else label="API Name" prop="name" class="first-item">
                       {{showName(tempApi.api_id)}}
                     </el-form-item>
-                    <el-form-item label="版本号">
+                    <el-form-item label="Version">
                       <el-input-number v-if="defineStatus=='create'" class="no-border-input" style="width:90px;border:none" v-model="tempApi.version"  :min="1" :max="9" size="mini"></el-input-number>
                       <span v-else>{{showVersion(tempApi.api_id)}}</span>
                     </el-form-item>
-                    <el-form-item label="描述">
-                      <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}" placeholder="简单描述该API" v-model="tempApi.desc">
+                    <el-form-item label="Desc">
+                      <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}" placeholder="Describe your api" v-model="tempApi.desc">
                       </el-input>
                     </el-form-item>
                   </el-form>
               </div>
               <div v-show="apiDefineStep==1">
                   <el-form label-position="left" label-width="150px" size="small">
-                    <el-form-item label="代理类型" prop="route_type">
-                      <el-select  class="filter-item" v-model="tempApi.route_type" style="width: 150px"  placeholder="请选择代理类型">
-                        <el-option label="同步代理" :value=1></el-option>
-                        <el-option  label="重定向" :value=2></el-option>
+                    <el-form-item label="Proxy Type" prop="route_type">
+                      <el-select  class="filter-item" v-model="tempApi.route_type" style="width: 150px"  placeholder="please choose">
+                        <el-option label="Direct" :value=1></el-option>
+                        <el-option  label="Redirect" :value=2></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="后端服务类型" prop="name" class="first-item">
+                    <el-form-item label="Backend Type" prop="name" class="first-item">
                       <el-radio-group v-model="tempApi.route_proto">
-                        <el-radio :label="1">HTTP(s)服务</el-radio>
+                        <el-radio :label="1">HTTP(s)</el-radio>
                         <el-radio :label="2">Mock</el-radio>
                       </el-radio-group> 
                     </el-form-item>
                     <div v-if="tempApi.route_proto==1">
-                      <el-form-item label="后端服务地址" required>
-                        <el-tooltip content="待访问的后段服务地址" placement="top">
+                      <el-form-item label="Backend URL" required>
+                        <el-tooltip content="The application url you want to access" placement="top">
                             <el-input v-model="tempApi.route_addr"></el-input>
                         </el-tooltip>
                       </el-form-item>
-                      <el-form-item label="Header和Cookie">
-                          <el-tag type="success" size="large" style="border:none;">默认透传</el-tag>
+                      <el-form-item label="Header,Cookie">
+                          <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
                       </el-form-item>
-                       <el-form-item label="请求参数">
-                          <el-tag type="success" size="large" style="border:none;">默认透传</el-tag>
+                       <el-form-item label="Params">
+                          <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
                       </el-form-item>
                     </div>
                     <div v-else>
-                      <el-form-item label="Mock返回">
-                        <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}" placeholder="这里请填写数据的元信息，例如返回json就填写json格式,返回字符串就填写字符串，网关不做任何转换，直接返回给请求的客户端" v-model="tempApi.mock_data"></el-input>
+                      <el-form-item label="Mock Data">
+                        <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}" placeholder='if you fill with {"a":"b"},juz will directly return the filling content' v-model="tempApi.mock_data"></el-input>
                           <el-alert
                           :closable=false
-                            title="注意！设置Mock后，网关会自动模拟数据，实际请求不会到达后端服务"
+                            title="Attention! When mock is used, the client request will get the mock data, the request will never reach the backend service"
                             type="warning">
                           </el-alert>
                       </el-form-item>    
@@ -245,21 +246,8 @@
               <div v-show="apiDefineStep==2">
                   <el-form label-position="left" label-width="150px" size="small">
                       <div class="form-block">
-                          <span>标签分组<el-tag type="success" size="mini" style="border:none;">可选</el-tag></span>
-                          <el-form-item label="标签" prop="route_type" style="margin-top:10px"> 
-                            <el-select  clearable class="filter-item" v-model="tempApi.label" style="width: 150px"  placeholder="选择标签">
-                              <el-option v-for="l in labels"  :key="l" :label="l" :value="l"></el-option>
-                            </el-select>
-                          </el-form-item>
-                          <el-alert
-                            :closable=false
-                            title="您可以为同一个系统或者功能的API设置一样的标签组，然后就可以对该系统进行监控和数据统计了"
-                            type="success">
-                          </el-alert>
-                      </div>
-                      <div class="form-block">
-                        <span>参数验证<el-tag type="success" size="mini" style="border:none;">可选</el-tag></span>
-                        <el-form-item label="开启验证" style="width:300px" class="first-item">
+                        <span>Param Verify<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item label="On/Off" style="width:300px" class="first-item">
                             <el-switch
                               v-model="tempApi.verify_on"
                               active-color="#13ce66"
@@ -267,14 +255,14 @@
                               :inactive-value='switchInactive'>
                             </el-switch>
                         </el-form-item>
-                        <el-form-item label="验证表" style="width:300px" class="first-item">
-                          <el-button type="success" icon="el-icon-edit"  @click="showVerify">编辑内容</el-button>
+                        <el-form-item label="Verify Table" style="width:300px" class="first-item">
+                          <el-button type="success" icon="el-icon-edit"  @click="showVerify">Edit</el-button>
                         </el-form-item>
                       </div>
 
                       <div class="form-block">
-                        <span>流量路由(金丝雀测试)<el-tag type="success" size="mini" style="border:none;">可选</el-tag></span>
-                        <el-form-item label="开启路由" style="width:300px" class="first-item">
+                        <span>Canary Test<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item label="On/Off" style="width:300px" class="first-item">
                             <el-switch
                               v-model="tempApi.traffic_on"
                               active-color="#13ce66" 
@@ -282,20 +270,20 @@
                               :inactive-value='switchInactive'>
                             </el-switch>
                         </el-form-item>
-                        <el-form-item label="目标api" prop="req_timeout" style="width:500px" class="first-item">
-                          <el-tooltip content="指定路由到的api名" placement="top">
+                        <el-form-item label="Target APIID" style="width:500px" class="first-item">
+                          <el-tooltip content="Some traffic will route to this api id" placement="top">
                             <el-input v-model="tempApi.traffic_api" placeholder="">
                             </el-input>
                           </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="路由比例" prop="req_timeout">
-                          <el-tooltip content="将指定的比例路由到上面的目标API,在0和100之间取值" placement="top">
-                              <el-input-number v-model="tempApi.traffic_ratio" :min="0" :max="100"></el-input-number>
+                        <el-form-item label="Traffic Ratio" prop="req_timeout">
+                          <el-tooltip content="e.g. 10 means 10% traffic will route to the api id above" placement="top">
+                              <el-input-number v-model="tempApi.traffic_ratio" :min="1" :max="100"></el-input-number>
                           </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="IP列表" style="width:300px" class="first-item">
-                          <el-tooltip content="精确指定哪些IP的客户端被路由到上面的目标API" placement="top">
-                            <el-input v-model="tempApi.traffic_ips" placeholder="ip之间空格分割">
+                        <el-form-item label="IP List" style="width:400px" class="first-item">
+                          <el-tooltip content="Controls which ip will be routed,if not control,routed will be randomly" placement="top">
+                            <el-input v-model="tempApi.traffic_ips" placeholder="Separate ips with Spaces">
                             </el-input>
                           </el-tooltip>
                         </el-form-item>
@@ -303,14 +291,14 @@
 
                        <el-alert
                         style="margin-top:8px"
-                            title="小提示: 您可以去策略页面新建策略，再进行下面的设置"
+                            title="Tips: you need to create strategy in strategy page first"
                             :closable=false
                             type="success">
                           </el-alert>
                       <div class="form-block">
-                        <span>黑白名单<el-tag type="success" size="mini" style="border:none;">可选</el-tag></span>
-                        <el-form-item label="选择策略" prop="req_timeout">
-                          <el-select clearable class="filter-item" v-model="selBW" @change="selectBW" style="width: 200px"  placeholder="请选择">
+                        <span>White/Black List<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item label="Strategy" prop="req_timeout" class="first-item">
+                          <el-select clearable class="filter-item" v-model="selBW" @change="selectBW" style="width: 200px"  placeholder="please choose">
                             <el-option v-for="s in  filterStrategies(1)" :key="s.name" :label="s.name" :value="s.id">
                             </el-option>
                           </el-select>
@@ -325,9 +313,9 @@
                         </el-form-item>
                       </div>
                       <div class="form-block">
-                        <span>超时重试<el-tag type="success" size="mini" style="border:none;">可选</el-tag></span>
-                        <el-form-item label="选择策略" prop="req_timeout">
-                          <el-select clearable class="filter-item" v-model="selRetry" @change="selectRetry" style="width: 200px"  placeholder="请选择">
+                        <span>Timeout/Retry<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item label="Strategy" prop="req_timeout" class="first-item">
+                          <el-select clearable class="filter-item" v-model="selRetry" @change="selectRetry" style="width: 200px"  placeholder="please choose">
                             <el-option v-for="s in  filterStrategies(2)" :key="s.name" :label="s.name" :value="s.id"> 
                             </el-option>
                           </el-select>
@@ -342,9 +330,9 @@
                         </el-form-item>
                       </div>
                       <div class="form-block">
-                        <span>流量控制<el-tag type="success" size="mini" style="border:none;">可选</el-tag></span>
-                        <el-form-item label="选择策略" prop="req_timeout">
-                          <el-select clearable class="filter-item" v-model="selTraffic" @change="selectTraffic" style="width: 200px"  placeholder="请选择">
+                        <span>Traffic Control<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item label="Strategy" prop="req_timeout" class="first-item">
+                          <el-select clearable class="filter-item" v-model="selTraffic" @change="selectTraffic" style="width: 200px"  placeholder="please choose">
                             <el-option v-for="s in  filterStrategies(3)" :key="s.name" :label="s.name" :value="s.id"> 
                             </el-option>
                           </el-select>
@@ -364,15 +352,15 @@
         </el-row>
 
          <div slot="footer" class="dialog-footer">
-            <el-button @click="nextDefineStep(false)" v-show="apiDefineStep!=0">上一步</el-button>
-            <el-button @click="nextDefineStep(true)" v-show="apiDefineStep!=2" type="success">下一步</el-button>
-            <el-button  type="primary" @click="saveApi" v-show="apiDefineStep!=0">保存</el-button>
+            <el-button @click="nextDefineStep(false)" v-show="apiDefineStep!=0">Prev</el-button>
+            <el-button @click="nextDefineStep(true)" v-show="apiDefineStep!=2" type="success">Next</el-button>
+            <el-button  type="primary" @click="saveApi" v-show="apiDefineStep!=0">Save</el-button>
           </div>
       </el-dialog>
 
 
       <el-dialog
-        title="参数验证"
+        title="Param Verify"
         :fullscreen=true
         :visible.sync="veryfyVisible"
       >
@@ -383,42 +371,42 @@
             <el-col :span=16 :offset=1>
                 <el-form label-position="left" label-width="70px">
                   <div>
-                    <span>为API: {{tempApi.api_id}} 新建规则</span>
-                    <el-form-item label="参数名" style="margin-top:15px">
-                      <el-input v-model="tempVerifyRule.param" placeholder="参数名" style="width:150px" >
+                    <span>Create rule for  <strong>{{tempApi.api_id}}</strong> </span>
+                    <el-form-item label="Param" style="margin-top:15px">
+                      <el-input v-model="tempVerifyRule.param" placeholder="Param name" style="width:150px" >
                       </el-input>
                     </el-form-item>
-                    <el-form-item label="规则">
-                      <el-input v-model="tempVerifyRule.rule" placeholder="规则，正则表达式" style="width:350px">
+                    <el-form-item label="Rule">
+                      <el-input v-model="tempVerifyRule.rule" placeholder="regexp format" style="width:350px">
                       </el-input>
                     </el-form-item>
-                    <el-form-item label="测试数据">
-                      <el-input v-model="tempVerifyRule.test_data" placeholder="给出测试数据" style="width:150px">
+                    <el-form-item label="Test data">
+                      <el-input v-model="tempVerifyRule.test_data" placeholder="input test data for test the rule" style="width:150px">
                       </el-input>
                     </el-form-item>
-                     <el-button @click="addVerifyRule" type="success" >创建并测试</el-button>
+                     <el-button @click="addVerifyRule" type="success" >Test and Create</el-button>
                   </div>
               
                 </el-form>
 
                 <div class="table" style="margin-top:15px;overflow-y:auto">
                   <el-table  :data="tempApi.param_rules" border fit highlight-current-row style="width: 100%;">
-                    <el-table-column align="center" label="参数名" width="150">
+                    <el-table-column align="center" label="Param" width="150">
                       <template slot-scope="scope">
                         <span>{{scope.row.param}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column width="400" align="center" label="规则">
+                    <el-table-column width="400" align="center" label="Rule">
                       <template slot-scope="scope">
                         <span>{{scope.row.rule}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column width="250" align="center" label="测试数据" >
+                    <el-table-column width="250" align="center" label="Test Data" >
                       <template slot-scope="scope">
                           <span>{{scope.row.test_data}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
+                    <el-table-column align="center" label="Operate" class-name="small-padding fixed-width">
                       <template slot-scope="scope"> 
                         <el-button  type="text" size="mini" icon="el-icon-minus" circle @click="delParamRule(scope.row.param)"></el-button>
                       </template>
@@ -429,31 +417,31 @@
         </el-row>
 
         <span slot="footer" class="dialog-footer">
-          <el-button @click="cancelVerify">关闭</el-button>
+          <el-button @click="cancelVerify">Close</el-button>
         </span>
       </el-dialog>
 
       <!-- 批量设置策略 -->
-      <el-dialog title="批量策略管理" :visible.sync="batchStrategyVisible" close-on-press-escape=true>
+      <el-dialog title="Batch Strategy Setting" :visible.sync="batchStrategyVisible" close-on-press-escape=true>
         <el-form  label-position="left" label-width="120px" style='width: 650px; margin-left:50px;' size="mini">
             <div class="form-block">
-              <span>批量设置策略</span>
+              <span>Batch Strategy</span>
               <el-alert
                   style="margin-top:8px"
-                  title="警告 ：批量设置会强制覆盖之前的策略，请谨慎操作!"
+                  title="Warning: batch setting will overide the api's specific setting, please operate with caution!"
                   :closable=false
                   type="warning">
               </el-alert>
               <el-alert
                   style="margin-top:8px"
-                  title="提示 ：未选择的策略将被忽略，不会将API的对应策略设置为空"
+                  title="Tips: the unselected strategy will be ignored, it will not setting your api's corresponding strategy to null"
                   :closable=false
                   type="success">
               </el-alert>
                 <div class="form-block">
-                  <span>黑白名单</span>
-                  <el-form-item label="选择策略">
-                    <el-select clearable class="filter-item" v-model="batchBW" style="width: 200px"  placeholder="请选择">
+                  <span>White/Black List</span>
+                  <el-form-item label="Stategy">
+                    <el-select clearable class="filter-item" v-model="batchBW" style="width: 200px"  placeholder="please choose">
                       <el-option v-for="s in  filterStrategies(1)" :key="s.name" :label="s.name" :value="s.id">
                       </el-option>
                     </el-select>
@@ -468,9 +456,9 @@
                   </el-form-item>
                 </div>
                 <div class="form-block">
-                  <span>超时重试</span>
-                  <el-form-item label="选择策略" prop="req_timeout">
-                    <el-select clearable class="filter-item" v-model="batchRetry"  style="width: 200px"  placeholder="请选择">
+                  <span>Timeout/Retry</span>
+                  <el-form-item label="Strategy" prop="req_timeout">
+                    <el-select clearable class="filter-item" v-model="batchRetry"  style="width: 200px"  placeholder="please choose">
                       <el-option v-for="s in  filterStrategies(2)" :key="s.name" :label="s.name" :value="s.id"> 
                       </el-option>
                     </el-select>
@@ -485,9 +473,9 @@
                   </el-form-item>
                 </div>
                 <div class="form-block">
-                  <span>流量控制</span>
+                  <span>Traffic Control</span>
                   <el-form-item label="选择策略" prop="req_timeout">
-                    <el-select clearable class="filter-item" v-model="batchTraffic"  style="width: 200px"  placeholder="请选择">
+                    <el-select clearable class="filter-item" v-model="batchTraffic"  style="width: 200px"  placeholder="please choose">
                       <el-option v-for="s in  filterStrategies(3)" :key="s.name" :label="s.name" :value="s.id"> 
                       </el-option>
                     </el-select>
@@ -503,25 +491,25 @@
                 </div>
               </div>
               <div class="form-block" style="padding-bottom:20px">
-                <span>批量删除策略</span>
+                <span>Batch Delete Strategy</span>
                 <el-alert
                   style="margin-top:8px"
-                  title="警告 ：批量删除会删除所选API的对应策略，请谨慎操作!"
+                  title="Warning: batch setting will delete the api's specific setting, please operate with caution!"
                   :closable=false
                   type="warning">
                 </el-alert>
                 <div style="margin-top:10px">
-                  <el-button @click="batchDelStrategy(1)">删除黑白名单</el-button>
-                  <el-button style="margin-left:10px;" @click="batchDelStrategy(2)">删除超时重试</el-button>
-                  <el-button style="margin-left:10px;" @click="batchDelStrategy(2)">删除流量控制</el-button>
+                  <el-button @click="batchDelStrategy(1)">Del White/Black</el-button>
+                  <el-button style="margin-left:10px;" @click="batchDelStrategy(2)">Del Timeout/Retry</el-button>
+                  <el-button style="margin-left:10px;" @click="batchDelStrategy(2)">Del Traffic Control</el-button>
                 </div>
              
               </div>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="batchStrategyVisible=false">取消</el-button>
+          <el-button @click="batchStrategyVisible=false">Cancel</el-button>
           <el-button  type="primary" @click="submitBatchStrategy">
-            <span>提交</span>
+            <span>Submit</span>
           </el-button>
         </div>
       </el-dialog>
@@ -562,10 +550,6 @@ export default {
         },
 
         apiDefineVisible: false,
-        createRules: {
-          name: [{ required: false, message: '请输入API Name,例如party.account.create', trigger: 'blur' }],
-          route_addr: [{ required: false, message: '请输入目标地址', trigger: 'blur' }]
-        },
         defineStatus: 'create',
 
 
@@ -613,7 +597,7 @@ export default {
         batchTraffic: '',
         selectApis: [],
 
-        labels: []
+        apps: []
       }
   },
   methods: {
@@ -630,16 +614,16 @@ export default {
     },
     apiNameAlert() {
       if (this.tempApi.path_type==0) {
-         return "API ID是由Service + API名 + 版本号自动生成的，无需手动设置"
+         return "API ID is auto generated with this rule: Service + API Name + 'v' + Version, e.g. test.get.v1"
       } else {
-        return "API ID是由API名 + 版本号自动生成的，无需手动设置"
+        return "API ID is auto generated with this rule: API Name + 'v' + VersionAPI ID,e.g. /a/b/c.v1"
       }
     },
     apiNameTooltip() {
       if (this.tempApi.path_type==0) {
-         return "必须是a.b这类形式，用.分割，只支持英文字母和数字"
+         return "The api name must be the form of a.b, sperated with '.', only allow alphabet and numberic"
       } else {
-        return "必须是url路径形式，例如/path1/path2"
+        return "The api name must be the form of /a/b,only allow alphabet and numberic"
       }
     },
     showName(apiID) {
@@ -651,17 +635,17 @@ export default {
     batchRelease() {
       if (this.selectApis.length == 0) {
         this.$message({
-          message: '未选择任何API',
+          message: 'No apis being selected',
           type: 'warning',
           duration: 3 * 1000,
           center: true
         }) 
         return 
       }
-      this.$confirm('您确定要批量发布选中的API吗？', '提示', {
+      this.$confirm('Are you sure to batch release the selected apis?', 'Warning', {
           dangerouslyUseHTMLString: true,
-          cancelButtonText: '取消',
-          confirmButtonText: '确定',
+          cancelButtonText: 'Cancel',
+          confirmButtonText: 'Submit',
           type: 'info'
         }).then(() => {
           var apiIDs = []
@@ -670,14 +654,14 @@ export default {
           }
           var s = JSON.stringify(apiIDs)
           var params = {
-              target_service: 'tfe.manage',
+              target_app: 'tfe.manage',
               target_path: '/manage/api/batchRelease',
               api_ids: s
           }
           proxy('POST',params).then(res => {
             this.loadApis(this.currentPage)
             this.$message({
-              message: '批量发布成功',
+              message: 'Batch release successfully',
               type: 'success',
               duration: 5 * 1000,
               center: true
@@ -686,10 +670,10 @@ export default {
         });
     },
     batchDelStrategy(type) {
-      this.$confirm('警告 ：批量删除会删除所选API的对应策略，您确定要继续吗？', '提示', {
+      this.$confirm('Are you sure to batch delete the strategy?', 'Warning', {
           dangerouslyUseHTMLString: true,
-          cancelButtonText: '取消',
-          confirmButtonText: '确定',
+          cancelButtonText: 'Cancel',
+          confirmButtonText: 'Submit',
           type: 'info'
         }).then(() => {
           var apiIDs = []
@@ -698,7 +682,7 @@ export default {
           }
           var s = JSON.stringify(apiIDs)
           var params = {
-              target_service: 'tfe.manage',
+              target_app: 'tfe.manage',
               target_path: '/manage/api/batchDelStrategy',
               api_ids: s,
               type: type,
@@ -707,7 +691,7 @@ export default {
           proxy('POST',params).then(res => {
             this.loadApis(this.currentPage)
             this.$message({
-              message: '批量删除成功',
+              message: 'Batch delete successfully',
               type: 'success',
               duration: 3 * 1000,
               center: true
@@ -719,17 +703,18 @@ export default {
     submitBatchStrategy() {
       if (this.batchBW =='' && this.batchRetry == '' && this.batchTraffic == '') {
         this.$message({
-          message: '没有选择任何策略',
+          message: 'No strategy being selected',
           type: 'warning',
           duration: 3 * 1000,
           center: true
         }) 
         return 
       }
-      this.$confirm('警告 ：批量设置会强制覆盖已选择API的策略设置，您确定要继续吗？', '提示', {
+      
+      this.$confirm("Batch setting will overide the api's specific setting,want to continue?", 'Warning', {
           dangerouslyUseHTMLString: true,
-          cancelButtonText: '取消',
-          confirmButtonText: '确定',
+          cancelButtonText: 'Cancel',
+          confirmButtonText: 'Submit',
           type: 'info'
         }).then(() => {
           var apiIDs = []
@@ -738,7 +723,7 @@ export default {
           }
           var s = JSON.stringify(apiIDs)
           var params = {
-              target_service: 'tfe.manage',
+              target_app: 'tfe.manage',
               target_path: '/manage/api/batchStrategy',
               api_ids: s,
               batch_bw: this.batchBW,
@@ -749,7 +734,7 @@ export default {
           proxy('POST',params).then(res => {
             this.loadApis(this.currentPage)
             this.$message({
-              message: '批量设置成功',
+              message: 'Batch strategy successfully',
               type: 'success',
               duration: 3 * 1000,
               center: true
@@ -761,7 +746,7 @@ export default {
     handleBatchStrategy() {
       if (this.selectApis.length == 0) {
         this.$message({
-          message: '未选择任何API',
+          message: 'No apis being selected',
           type: 'warning',
           duration: 3 * 1000,
           center: true
@@ -783,7 +768,7 @@ export default {
       var text = JSON.stringify(api)
       clip(text, event)
       this.$message({
-        message: '复制成功',
+        message: 'Copied',
         type: 'success',
         duration: 2000
       })
@@ -791,7 +776,7 @@ export default {
     getStrategy(id) {
       if (id=='') {
         this.$message({
-          message: '没有选择策略',
+          message: 'No strategy being selected',
           type: 'warning',
           duration: 3 * 1000,
           center: true
@@ -799,7 +784,7 @@ export default {
         return 
       }
         var params = {
-          target_service: 'tfe.manage',
+          target_app: 'tfe.manage',
           target_path: '/manage/strategy/query',
           id: id
         }
@@ -861,42 +846,37 @@ export default {
       }
     },
     offlineAPI(api) {
-      this.$confirm('您将要下线以下API：' + api.api_id + '\n下线后，所有的外部用户将无法访问该API对应的服务', '提示', {
+      this.$confirm('You will offline this api：' + api.api_id + '\n,when offlined, clients will not access this api anymore', 'Warning', {
           dangerouslyUseHTMLString: true,
-          cancelButtonText: '取消',
-          confirmButtonText: '确定',
+          cancelButtonText: 'Cancel',
+          confirmButtonText: 'Submit',
           type: 'info'
         }).then(() => {
           var params = {
-              target_service: 'tfe.manage',
+              target_app: 'tfe.manage',
               target_path: '/manage/api/offline',
               api_id: api.api_id,
           }
           proxy('POST',params).then(res => {
             api.release_version=''
             this.$message({
-              message: 'API下线成功',
+              message: 'Offline successfully',
               type: 'success',
               duration: 5 * 1000,
               center: true
             }) 
           })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消下线'
-          });          
-        });
+        })
     },
     releaseAPI(api) {
-       this.$confirm('您将要发布以下API：' + api.api_id, '提示', {
+       this.$confirm('You will release this api：' + api.api_id, 'Warning', {
           dangerouslyUseHTMLString: true,
-          cancelButtonText: '取消',
-          confirmButtonText: '确定',
+          cancelButtonText: 'Cancel',
+          confirmButtonText: 'Submit',
           type: 'info'
         }).then(() => {
           var params = {
-              target_service: 'tfe.manage',
+              target_app: 'tfe.manage',
               target_path: '/manage/api/release',
               api_id: api.api_id,
           }
@@ -904,18 +884,13 @@ export default {
             api.release_version=api.revise_version
             this.loadApis(this.currentPage)
             this.$message({
-              message: 'API发布成功',
+              message: 'Api released successfully',
               type: 'success',
               duration: 5 * 1000,
               center: true
             }) 
           })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消发布'
-          });          
-        });
+        })
     },
     delParamRule(param) {
       for (var i=0;i<this.tempApi.param_rules.length;i++) {
@@ -932,7 +907,7 @@ export default {
         for (var i=0;i<this.tempApi.param_rules.length;i++) {
           if (this.tempVerifyRule.param == this.tempApi.param_rules[i].param) {
             this.$message({
-              message: '参数名已存在',
+              message: 'Param exists',
               type: 'warning',
               duration: 3 * 1000,
               center: true
@@ -943,7 +918,7 @@ export default {
       }
       // 验证正则是否合法
        var params = {
-            target_service: 'tfe.manage',
+            target_app: 'tfe.manage',
             target_path: '/manage/api/verifyParamRule',
             param: this.tempVerifyRule.param,
             rule: this.tempVerifyRule.rule,
@@ -956,6 +931,12 @@ export default {
             test_data: this.tempVerifyRule.test_data
           }) 
           this.tempVerifyRule = {}
+          this.$message({
+              message: 'Test successfully',
+              type: 'success',
+              duration: 3 * 1000,
+              center: true
+            })
         })
     },
     cancelAPIDefine() {
@@ -971,15 +952,14 @@ export default {
 
       this.veryfyVisible = true
       this.ruleContent = `
-         <p><strong>示例演示</strong></p>
+         <p><strong>Demo</strong></p>
         <p>mobile : ^1[0-9]{10}$</p>
         <p>email : ^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$</p>
 
-        <p><strong>示例解析</strong></p>
-        <p>1. 我们假定http的请求参数为k1=v1&k2=v2&k3=v3的形式</p>
-        <p>2. 首先我们对mobile字段进行了限制，要求必须符合"^1[0-9]{10}$"这种形式的正则表达式</p>
-        <p>3. 暂时只支持最外层参数</p>
-        <p>综上，符合上述请求格式的参数形式为http://xxx.com/index?mobile=15880271182&email=aaa@bbb.com}</p>
+        <p><strong>Demo analysis</strong></p>
+        <p>1. Let's assume our http params is like this: k1=v1&k2=v2&k3=v3</p>
+        <p>2. Now we want to verify the mobile param,we use the regexp rule: ^1[0-9]{10}$</p>
+        <p>so，a client can access with http://xxx.com/index?mobile=15880271182&email=aaa@bbb.com}</p>
       `
       
     },
@@ -994,7 +974,7 @@ export default {
       // 打开API面板时，因为数据都是一次性加载，因此我们需要重新加载数据
       //加载审计日志
       var params = {
-          target_service: 'tfe.manage',
+          target_app: 'tfe.manage',
           target_path: '/manage/auditLog/count',
           target_type: 2,
           target_id: this.tempApi.api_id
@@ -1004,7 +984,7 @@ export default {
       })
 
       var params = {
-          target_service: 'tfe.manage',
+          target_app: 'tfe.manage',
           target_path: '/manage/auditLog/load',
           target_type: 2,
           target_id: this.tempApi.api_id,
@@ -1019,7 +999,7 @@ export default {
       this.apiManageVisible = false
     },
     handleEdit() {
-      this.apiTitle = '编辑API'
+      this.apiTitle = 'Edit API'
       this.apiDefineVisible = true
       if (this.tempApi.bw_strategy != 0) {
         this.selBW = this.tempApi.bw_strategy
@@ -1036,21 +1016,21 @@ export default {
     delApi(api) {
       if (api.release_version != '') {
         this.$message({
-          message: '请先下线API，再删除',
+          message: 'Please offline the api first',
           type: 'warning',
           duration: 3 * 1000,
           center: true
         })
         return 
       }
-      this.$confirm('此操作将永久删除<strong>该API</strong>, 是否继续删除?', '提示', {
+      this.$confirm('Are you sure to delete this api?', 'Warning', {
         dangerouslyUseHTMLString: true,
-        cancelButtonText: '不，赶紧取消删除',
-        confirmButtonText: 'ok',
+        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Submit',
         type: 'error'
       }).then(() => {
           var params = {
-              target_service: 'tfe.manage',
+              target_app: 'tfe.manage',
               target_path: '/manage/api/delete',
               service: api.service,
               api_id: api.api_id
@@ -1068,23 +1048,18 @@ export default {
             this.apiManageVisible = false
             this.loadApis(this.currentPage)
             this.$message({
-                message: '删除API成功',
+                message: 'Delete api successfully',
                 type: 'success',
                 duration: 3 * 1000,
                 center: true
             })
           })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+        })
     },
     saveApi() {
       if (this.tempApi.api_id == '') {
         this.$message({
-              message: "API名不能为空,且必须以'SERVICE.'为前缀",
+              message: "Api name cant not be empty",
               type: 'error',
               duration: 3 * 1000,
               center: true
@@ -1098,7 +1073,7 @@ export default {
         s.api_id = this.genAPIIDByType()
       } 
       var params = {
-          target_service: 'tfe.manage',
+          target_app: 'tfe.manage',
           target_path: '/manage/api/define',
           api : s,
           action: this.defineStatus
@@ -1121,7 +1096,7 @@ export default {
           })
         } else {
           this.$message({
-            message: '编辑API成功',
+            message: 'Edit api ok',
             type: 'success',
             duration: 3 * 1000,
             center: true
@@ -1141,14 +1116,14 @@ export default {
     handleCreate() {
       if (this.selectedService=='') {
           this.$message({
-              message: '请先选择Service',
+              message: 'Select a service first',
               type: 'warning',
               duration: 3 * 1000,
               center: true
           })
           return 
       }
-      this.apiTitle = '创建API'
+      this.apiTitle = 'Create API'
       this.apiDefineStep = 0
       this.tempApi = {
          service: this.selectedService,
@@ -1172,14 +1147,19 @@ export default {
       this.apiDefineVisible = true
       this.defineStatus = 'create'
     },
-    handleSelService() {
+    calcService() {
+        return this.selectedService || this.$store.getters.service
+    },
+    handleSelService(service) {
+       this.$store.dispatch('setService', service)
+       this.selectedService = service
        this.loadApis(1)
        this.loadStrategy(this.selectedService)
-       this.loadLabels()
+       this.loadApps()
     },
     loadStrategy(service) {
        var params = {
-          target_service: 'tfe.manage',
+          target_app: 'tfe.manage',
           target_path: '/manage/strategy/load',
           service: this.selectedService,
           type: 0, //加载所有的策略
@@ -1192,7 +1172,8 @@ export default {
        this.currentPage = page
         //加载审计日志
         var params = {
-            target_service: 'tfe.manage',
+            target_service: this.selectedService,
+            target_app: 'tfe.manage',
             target_path: '/manage/api/count',
             q: this.q,
             service: this.selectedService
@@ -1203,51 +1184,51 @@ export default {
 
        // 加载Service底下的所有API
         var params = {
-                target_service: 'tfe.manage',
-                target_path: '/manage/api/query',
-                service: this.selectedService,
-                q: this.q,
-                page: page
-            }
+          target_service: this.selectedService,
+          target_app: 'tfe.manage',
+          target_path: '/manage/api/query',
+          service: this.selectedService,
+          q: this.q,
+          page: page
+        }
         proxy('POST',params).then(res => {
            this.apis = res.data.data
+           console.log(this.apis)
            for (var i=0;i<this.apis.length;i++) {
              this.apis[i].param_rules = JSON.parse(this.apis[i].param_rules)
            }
         })
     },
-    loadLabels() {
-       //加载审计日志
-        var params = {
-            target_service: 'tfe.manage',
-            target_path: '/manage/labels/query',
-            service: this.selectedService
-        }
-        proxy('POST',params).then(res => {
-            this.labels = res.data.data
+    loadApps() {
+        request({
+          url: '/infra/app/query',
+          method: 'GET', 
+          params: {
+              service: this.selectedService
+          }
+        }).then(res => {
+            this.apps = res.data.data
         })
     },
     loadServices() {
-      // 加载该用户的所有service
-        var params = {
-                target_service: 'tfe.manage',
-                target_path: '/manage/service/query',
-            }
-        proxy('POST',params).then(res => {
-           if (res.data.status == 200) {
-             this.services = res.data.data
-             if (this.services.length > 0) {
-               this.selectedService = this.services[0].name
-               this.loadApis(1)
-               this.loadStrategy(this.selectedService)
-               this.loadLabels()
-             }
-           }
+        request({
+          url: '/infra/service/query',
+          method: 'GET', 
+          params: {
+          }
+        }).then(res => {
+            this.services = res.data.data
         })
     }
   },
-  created() {
+  mounted() {
     this.loadServices()
+    this.selectedService = this.$store.getters.service
+    if (this.selectedService != '') {
+        this.loadApps()
+        this.loadApis(1)
+        this.loadStrategy(this.selectedService)
+    }
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)

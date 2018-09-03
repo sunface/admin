@@ -1,17 +1,17 @@
 <template>
   <div class="param-rules">
        <el-table  :data="rules" border fit highlight-current-row style="width: 100%;">
-            <el-table-column align="center" label="参数名" width="150">
+            <el-table-column align="center" label="Param" width="150">
                 <template slot-scope="scope">
                 <span>{{scope.row.param}}</span>
                 </template>
             </el-table-column>
-            <el-table-column width="400" align="center" label="规则">
+            <el-table-column width="400" align="center" label="Rule">
                 <template slot-scope="scope">
                 <span>{{scope.row.rule}}</span>
                 </template>
             </el-table-column>
-            <el-table-column width="250" align="center" label="测试数据" >
+            <el-table-column width="250" align="center" label="Test Data" >
                 <template slot-scope="scope">
                     <span>{{scope.row.test_data}}</span>
                 </template>

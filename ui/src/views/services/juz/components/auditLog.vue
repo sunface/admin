@@ -1,31 +1,30 @@
 <template>
   <div  :class="{'black-theme':isBlackTheme(),'audit-log':true}">
       <div class="table">
-        <el-table  :data="logs"  fit highlight-current-row style="width: 100%;"  :default-sort = "{prop: 'gmt_modified', order: 'descending'}">
-          <el-table-column align="left" label="发生时间" width="160" prop="gmt_modified">
+        <el-table  :data="logs"  fit highlight-current-row style="width: 100%;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
+          <el-table-column align="left" label="Create Date" width="160" prop="modify_date">
             <template slot-scope="scope">
-              <span>{{scope.row.gmt_modified}}</span>
+              <span>{{scope.row.modify_date}}</span>
             </template>
           </el-table-column>
-         <el-table-column width="100" align="left" label="目标类型">
+         <el-table-column width="100" align="left" label="Target Type">
             <template slot-scope="scope">
               <span v-if="scope.row.target_type==1">Service</span>
               <span v-else-if="scope.row.target_type==2">API</span>
-              <span v-else-if="scope.row.target_type==3">策略</span>
-              <span v-else-if="scope.row.target_type==4">设置权限</span>
-              <span v-else-if="scope.row.target_type==5">批量设置</span>
+              <span v-else-if="scope.row.target_type==3">Strategy</span>
+              <span v-else-if="scope.row.target_type==5">Batch Setting</span>
             </template>
           </el-table-column>
-          <el-table-column width="250" align="left" label="目标名称(ID)">
+          <el-table-column width="250" align="left" label="Target Name(ID)">
             <template slot-scope="scope">
               <span>{{scope.row.target_id}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="150" align="left" label="目标内容">
+          <el-table-column width="150" align="left" label="Content">
             <template slot-scope="scope">
               <span v-if="scope.row.target_type==1">
                 <span v-if="scope.row.content != ''">{{scope.row.content}}</span>
-                <span v-else>无描述</span>
+                <span v-else>null</span>
               </span>
               <span v-if="scope.row.target_type==4">{{scope.row.content}}</span>
               <span v-if="scope.row.target_type==3">
@@ -50,23 +49,23 @@
               <span>{{scope.row.service}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="100" align="left" label="操作类型">
+          <el-table-column width="150" align="left" label="Operate Type">
             <template slot-scope="scope"> 
-              <span v-if="scope.row.op_type==1">创建</span>
-              <span v-else-if="scope.row.op_type==2">编辑</span>
-              <span v-else-if="scope.row.op_type==3">发布</span>
-              <span v-else-if="scope.row.op_type==4">下线</span>
-              <span v-else-if="scope.row.op_type==5">删除</span>
+              <span v-if="scope.row.op_type==1">Create</span>
+              <span v-else-if="scope.row.op_type==2">Edit</span>
+              <span v-else-if="scope.row.op_type==3">Release</span>
+              <span v-else-if="scope.row.op_type==4">Offline</span>
+              <span v-else-if="scope.row.op_type==5">Delete</span>
             </template>
           </el-table-column>
-          <el-table-column width="200" align="left" label="操作人" prop="user_id">
+          <el-table-column width="200" align="left" label="Operator" prop="user_id">
             <template slot-scope="scope">
               <span>{{scope.row.user_id}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="管理" class-name="small-padding fixed-width">
+          <el-table-column align="center" label="Manage" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button  v-if="scope.row.content!=''" class="green-button"  type="text" @click="handleCopy(scope.row.content,$event)">复制配置</el-button>
+              <el-button  v-if="scope.row.content!=''" class="green-button"  type="text" @click="handleCopy(scope.row.content,$event)">Copy config</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -79,28 +78,28 @@
         </el-pagination>
       </div>
 
-      <el-dialog  title="API定义" :visible.sync="apiViewVisible" top="20px">
+      <el-dialog  title="API Define" :visible.sync="apiViewVisible" top="20px">
         <apiDefine :api="tempApi"></apiDefine>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="apiViewVisible = false">关闭</el-button>
+          <el-button @click="apiViewVisible = false">Close</el-button>
         </div>
       </el-dialog>
-      <el-dialog  title="黑白名单" :visible.sync="bwVisible" top="20px">
+      <el-dialog  title="White/Black List" :visible.sync="bwVisible" top="20px">
         <bwlist :strategy="strategy"></bwlist>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="bwVisible = false">关闭</el-button>
+          <el-button @click="bwVisible = false">Close</el-button>
         </div>
       </el-dialog>
-       <el-dialog  title="超时重试" :visible.sync="retryVisble" top="20px">
+       <el-dialog  title="Timout/Retry" :visible.sync="retryVisble" top="20px">
         <retry :strategy="strategy"></retry>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="retryVisble = false">关闭</el-button>
+          <el-button @click="retryVisble = false">Close</el-button>
         </div>
       </el-dialog>
-      <el-dialog  title="超时重试" :visible.sync="trafficVisible" top="20px">
+      <el-dialog  title="Traffic Control" :visible.sync="trafficVisible" top="20px">
         <traffic :strategy="strategy"></traffic>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="trafficVisible = false">关闭</el-button>
+          <el-button @click="trafficVisible = false">Close</el-button>
         </div>
       </el-dialog>
   </div>
@@ -188,14 +187,14 @@ export default {
     handleCopy(text, event) {
       clip(text, event)
       this.$message({
-        message: '复制成功',
+        message: 'Copied',
         type: 'success',
         duration: 2000
       })
     },
     loadLogs(page) {
         var params = {
-            target_service: 'tfe.manage',
+            target_app: 'tfe.manage',
             target_path: '/manage/auditLog/load',
             target_type: this.targetType,
             target_id: this.targetID,

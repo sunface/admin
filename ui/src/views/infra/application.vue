@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div>
+    <div class="filter-container">
         <el-tag>select service</el-tag>
         <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="请选择Service">
             <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name"></el-option>
@@ -9,7 +9,7 @@
     </div>
 
     <div class="table">
-        <el-table  :data="apps" border fit highlight-current-row style="width: 100%;min-height:1000px;"  :default-sort = "{prop: 'gmt_modified', order: 'descending'}">
+        <el-table  :data="apps" border fit highlight-current-row style="width: 100%;min-height:1000px;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
             <el-table-column align="center" label="Name" width="250" prop="name" sortable>
             <template slot-scope="scope">
                 <span>{{scope.row.name}}</span>

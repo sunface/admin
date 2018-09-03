@@ -48,7 +48,7 @@ to quickly create a Cobra application.`,
 		misc.InitConfig("admin.conf")
 		misc.Conf.Common.LogLevel = strings.ToLower(misc.Conf.Common.LogLevel)
 		g.InitLogger()
-		g.L.Info("当前服务版本号", zap.String("version", misc.Conf.Common.Version))
+		g.L.Info("Application version", zap.String("version", misc.Conf.Common.Version))
 
 		a := &admin.Admin{}
 		a.Start()
@@ -58,7 +58,7 @@ to quickly create a Cobra application.`,
 		signal.Notify(chSig, syscall.SIGINT, syscall.SIGTERM)
 
 		sig := <-chSig
-		g.L.Info("tfe收到关闭信号", zap.Any("signal", sig))
+		g.L.Info("received signal", zap.Any("signal", sig))
 	},
 }
 

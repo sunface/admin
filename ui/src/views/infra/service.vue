@@ -9,7 +9,7 @@
       </div>
 
       <div class="table">
-        <el-table  :data="services" border fit highlight-current-row style="width: 100%;min-height:1000px;"  :default-sort = "{prop: 'gmt_modified', order: 'descending'}">
+        <el-table  :data="services" border fit highlight-current-row style="width: 100%;min-height:1000px;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
           <el-table-column align="center" label="Name" width="250" prop="name" sortable>
             <template slot-scope="scope">
               <span>{{scope.row.name}}</span>

@@ -81,63 +81,44 @@ export const asyncRouterMap = [
     meta: { title: 'Services', icon: 'table', noCache: true },
     children: [
       {
-        path: 'tfe',
-        name: 'tfe',
-        meta: { title: 'TFE', noCache: true },
-        component: () => import('@/views/services/tfe/index'),
-        redirect: '/services/tfe/dashboard',
+        path: 'juz',
+        name: 'juz',
+        meta: { title: 'Juz.io', noCache: true },
+        component: () => import('@/views/services/juz/index'),
+        redirect: '/services/juz/dashboard',
         children: [
           {
             path: 'dashboard',
-            component: () => import('@/views/services/tfe/dashboard'),
+            component: () => import('@/views/services/juz/dashboard'),
             name: 'tfe-dashboard',
             hidden:true,
             meta: { title: 'Dashboard',  noCache: true }
           },
           {
-            path: 'service',
-            component: () => import('@/views/services/tfe/service'),
-            name: 'service',
-            meta: { title: 'Service管理',  noCache: true}
-          },
-          {
             path: 'api',
-            component: () => import('@/views/services/tfe/api'),
+            component: () => import('@/views/services/juz/api'),
             name: 'api',
-            meta: { title: 'API管理', noCache: true}
+            meta: { title: 'API', noCache: true}
           },
           {
             path: 'strategy',
-            component: () => import('@/views/services/tfe/strategy'),
+            component: () => import('@/views/services/juz/strategy'),
             name: 'strategy',
-            meta: { title: '策略管理', noCache: true}
-          },
-          {
-            path: 'label',
-            component: () => import('@/views/services/tfe/label'),
-            name: 'label',
-            meta: { title: '标签分组', noCache: true}
+            meta: { title: 'Strategy', noCache: true}
           },
           { 
             path: 'audit',
-            component: () => import('@/views/services/tfe/auditLogs'),
+            component: () => import('@/views/services/juz/auditLogs'),
             name: 'auditLogs',
             hidden:false,
-            meta: { title: '审计日志',  noCache: true}
+            meta: { title: 'Audit logs',  noCache: true}
           },
           { 
             path: 'import',
-            component: () => import('@/views/services/tfe/import'),
+            component: () => import('@/views/services/juz/import'),
             name: 'import',
             hidden:false,
-            meta: { title: '配置导入',  noCache: true}
-          },
-          {
-            path: 'log',
-            component: () => import('@/views/services/tfe/log'),
-            name: 'log',
-            hidden:true,
-            meta: { title: '日志查询',  noCache: true}
+            meta: { title: 'Config import',  noCache: true}
           }
         ]
       }
