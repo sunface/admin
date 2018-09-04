@@ -119,6 +119,13 @@ export const asyncRouterMap = [
             name: 'import',
             hidden:false,
             meta: { title: 'Config import',  noCache: true}
+          },
+          { 
+            path: 'metrics',
+            component: () => import('@/views/services/juz/metrics'),
+            name: 'metrics',
+            hidden:false,
+            meta: { title: 'Metrics',  noCache: true}
           }
         ]
       }

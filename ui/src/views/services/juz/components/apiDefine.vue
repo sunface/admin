@@ -190,7 +190,7 @@ export default {
     },
     getStrategy(id) {
         var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/strategy/query',
           id: id
         }

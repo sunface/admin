@@ -194,7 +194,7 @@ export default {
     },
     loadLogs(page) {
         var params = {
-            target_app: 'tfe.manage',
+            target_app: 'juzManage',
             target_path: '/manage/auditLog/load',
             target_type: this.targetType,
             target_id: this.targetID,

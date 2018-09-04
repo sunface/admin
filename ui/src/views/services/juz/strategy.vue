@@ -213,6 +213,7 @@ export default {
     handleSelService(service) {
        this.$store.dispatch('setService', service)
        this.selectedService = service
+       this.loadStrategy(service)
     },
      handleCopy(api, event) {
       var text = JSON.stringify(api)
@@ -237,7 +238,7 @@ export default {
           type: 'info'
         }).then(() => {
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/strategy/change',
               id: s.id,
               name : s.name,
@@ -266,7 +267,7 @@ export default {
           type: 'info'
         }).then(() => {
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/strategy/delete',
               id: s.id,
               name: s.name,
@@ -305,7 +306,7 @@ export default {
     s.content = JSON.stringify(s.content)
       // 创建策略
       var params = {
-        target_app: 'tfe.manage',
+        target_app: 'juzManage',
         target_path: '/manage/strategy/update',
         strategy: s
       }
@@ -331,9 +332,6 @@ export default {
       this.bwlistVisible = true
       this.tempBWKey = 'ip'
       this.isCretaeSubmit = false
-    },
-    handleSelService(service) {
-      this.loadStrategy(service)
     },
     //黑白名单
     removeBW(kv) {
@@ -394,7 +392,7 @@ export default {
       s.content = JSON.stringify(s.content)
       // 创建策略
       var params = {
-        target_app: 'tfe.manage',
+        target_app: 'juzManage',
         target_path: '/manage/strategy/create',
         strategy: s
       }
@@ -501,7 +499,7 @@ export default {
     },
     loadStrategy(service) {
        var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/strategy/load',
           service: this.selectedService,
           type: 0,

@@ -56,7 +56,7 @@ export default {
                   var o = JSON.parse(this.content)
                   o.param_rules = JSON.stringify(o.param_rules)
                   var params = {
-                        target_app: 'tfe.manage',
+                        target_app: 'juzManage',
                         target_path: '/manage/api/define',
                         api : o,
                         action: action
@@ -76,7 +76,7 @@ export default {
                   if (type=='create') {
                         // 创建策略
                         var params = {
-                            target_app: 'tfe.manage',
+                            target_app: 'juzManage',
                             target_path: '/manage/strategy/create',
                             strategy: this.content
                         }
@@ -92,7 +92,7 @@ export default {
                   } else {
                     // 创建策略
                     var params = {
-                        target_app: 'tfe.manage',
+                        target_app: 'juzManage',
                         target_path: '/manage/strategy/update',
                         strategy: this.content
                     }

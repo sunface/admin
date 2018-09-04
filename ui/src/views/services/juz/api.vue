@@ -31,14 +31,9 @@
               <span>{{scope.row.api_id}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="left" label="api name" width="160">
+          <el-table-column align="left" label="application" width="160">
             <template slot-scope="scope">
-              <span>{{showName(scope.row.api_id)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="left" label="version" width="80">
-            <template slot-scope="scope">
-              <span>{{showVersion(scope.row.api_id)}}</span>
+              <span>{{scope.row.app}}</span>
             </template>
           </el-table-column>
           <el-table-column width="300" align="left" label="target url" prop="route_addr">
@@ -150,6 +145,12 @@
                   <el-form label-position="left" label-width="110px" size="small">
                     <el-form-item label="Service">
                       {{tempApi.service}}
+                    </el-form-item>
+                    <el-form-item label="Application">
+                      <el-select clearable class="filter-item" v-model="tempApi.app" style="width: 200px"  placeholder="please choose">
+                            <el-option v-for="s in  apps" :key="s.name" :label="s.name" :value="s.name">
+                            </el-option>
+                          </el-select>
                     </el-form-item>
                     <el-form-item label="URL Type">
                        <el-switch
@@ -422,7 +423,7 @@
       </el-dialog>
 
       <!-- 批量设置策略 -->
-      <el-dialog title="Batch Strategy Setting" :visible.sync="batchStrategyVisible" close-on-press-escape=true>
+      <el-dialog title="Batch Strategy Setting" :visible.sync="batchStrategyVisible">
         <el-form  label-position="left" label-width="120px" style='width: 650px; margin-left:50px;' size="mini">
             <div class="form-block">
               <span>Batch Strategy</span>
@@ -654,7 +655,7 @@ export default {
           }
           var s = JSON.stringify(apiIDs)
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/api/batchRelease',
               api_ids: s
           }
@@ -682,7 +683,7 @@ export default {
           }
           var s = JSON.stringify(apiIDs)
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/api/batchDelStrategy',
               api_ids: s,
               type: type,
@@ -723,7 +724,7 @@ export default {
           }
           var s = JSON.stringify(apiIDs)
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/api/batchStrategy',
               api_ids: s,
               batch_bw: this.batchBW,
@@ -784,7 +785,7 @@ export default {
         return 
       }
         var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/strategy/query',
           id: id
         }
@@ -853,7 +854,7 @@ export default {
           type: 'info'
         }).then(() => {
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/api/offline',
               api_id: api.api_id,
           }
@@ -876,7 +877,7 @@ export default {
           type: 'info'
         }).then(() => {
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/api/release',
               api_id: api.api_id,
           }
@@ -918,7 +919,7 @@ export default {
       }
       // 验证正则是否合法
        var params = {
-            target_app: 'tfe.manage',
+            target_app: 'juzManage',
             target_path: '/manage/api/verifyParamRule',
             param: this.tempVerifyRule.param,
             rule: this.tempVerifyRule.rule,
@@ -974,7 +975,7 @@ export default {
       // 打开API面板时，因为数据都是一次性加载，因此我们需要重新加载数据
       //加载审计日志
       var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/auditLog/count',
           target_type: 2,
           target_id: this.tempApi.api_id
@@ -984,7 +985,7 @@ export default {
       })
 
       var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/auditLog/load',
           target_type: 2,
           target_id: this.tempApi.api_id,
@@ -1030,7 +1031,7 @@ export default {
         type: 'error'
       }).then(() => {
           var params = {
-              target_app: 'tfe.manage',
+              target_app: 'juzManage',
               target_path: '/manage/api/delete',
               service: api.service,
               api_id: api.api_id
@@ -1067,13 +1068,23 @@ export default {
         return 
       }
       
+      if (this.tempApi.app == '') {
+        this.$message({
+              message: "You must choose a application the api belongs",
+              type: 'error',
+              duration: 3 * 1000,
+              center: true
+        })
+        return 
+      }
+
       var s = Object.assign({},   this.tempApi) 
       s.param_rules = JSON.stringify(s.param_rules)
       if (this.defineStatus == 'create') {
         s.api_id = this.genAPIIDByType()
       } 
       var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/api/define',
           api : s,
           action: this.defineStatus
@@ -1129,6 +1140,7 @@ export default {
          service: this.selectedService,
          api_id: '',
          version: 1,
+         path_type:0,
          desc:''
 ,        route_type: 1,
          route_addr: 'http://',
@@ -1144,6 +1156,7 @@ export default {
          cached_time: 0,
          param_rules: []
       }
+
       this.apiDefineVisible = true
       this.defineStatus = 'create'
     },
@@ -1159,7 +1172,7 @@ export default {
     },
     loadStrategy(service) {
        var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/strategy/load',
           service: this.selectedService,
           type: 0, //加载所有的策略
@@ -1173,7 +1186,7 @@ export default {
         //加载审计日志
         var params = {
             target_service: this.selectedService,
-            target_app: 'tfe.manage',
+            target_app: 'juzManage',
             target_path: '/manage/api/count',
             q: this.q,
             service: this.selectedService
@@ -1185,7 +1198,7 @@ export default {
        // 加载Service底下的所有API
         var params = {
           target_service: this.selectedService,
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/api/query',
           service: this.selectedService,
           q: this.q,

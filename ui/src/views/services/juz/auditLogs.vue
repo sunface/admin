@@ -53,7 +53,7 @@ export default {
     loadLogs(service) {
       //加载审计日志
       var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/auditLog/count',
           target_type: 0,
           target_id: service
@@ -63,7 +63,7 @@ export default {
       })
 
       var params = {
-          target_app: 'tfe.manage',
+          target_app: 'juzManage',
           target_path: '/manage/auditLog/load',
           target_type: 0,
           target_id: service,
