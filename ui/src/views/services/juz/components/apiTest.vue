@@ -3,8 +3,10 @@
     <el-form class="black-form"  ref="dataForm" label-position="left" label-width="130px" >
         <el-form-item label="API ID"  >
             {{api.api_id}}
-        </el-form-item>        
-        <el-form-item label="Backend URL"  >
+        </el-form-item>    
+        <el-form-item label="Backend Info"  >
+            <span v-if="api.backend_type==1">HTTP(S)-</span>
+            <span v-else>Mock-</span>
             <span v-if="api.addr_type==1">URL-</span>
             <span v-else>ETCD-</span>
             {{api.backend_addr}}
@@ -32,8 +34,8 @@
                 type="warning">
             </el-alert>
         </el-form-item>
-        <el-form-item label="Output" style="width:600px">
-            <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 12}" placeholder="Test Result" v-model="testResult" :disabled=true>
+        <el-form-item label="Output" style="width:800px">
+            <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 50}" placeholder="Test Result" :value="calcResult()" :disabled=true>
             </el-input>
         </el-form-item>
 
@@ -72,6 +74,14 @@ export default {
     }
   },
   methods: {
+    calcResult() {
+        if (this.testResult == '') {
+            return ''
+        }
+        
+        var e = JSON.stringify(JSON.parse(this.testResult),null,'\t')
+        return e
+    },
     handleDebug() {
         if (this.debugOn) {
             this.$set(this.testParams,'debug_on',true)

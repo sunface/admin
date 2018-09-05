@@ -36,9 +36,14 @@
               <span>{{scope.row.app}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="300" align="left" label="target url" >
+          <el-table-column width="400" align="left" label="backend info" >
             <template slot-scope="scope">
-              <span>{{scope.row.backend_addr}}</span>
+              <span v-if="scope.row.backend_type==1">HTTP(S)-</span>
+              <span v-else>Mock-</span>
+              <span v-if="scope.row.addr_type==1">URL-</span>
+              <span v-else>ETCD-</span>
+              {{scope.row.backend_addr}}
+              <span v-if="scope.row.addr_type==2">-{{scope.row.backend_uri}}</span>
             </template>
           </el-table-column>
           <el-table-column width="250" align="left" label="status" >

@@ -64,7 +64,7 @@
             </div>
             <div v-else>
             <el-form-item label="Mock Data">
-                <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}"  v-model="api.mock_data"></el-input>
+                {{api.mock_data}}
             </el-form-item>    
         </div>
     </el-form>
