@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        <el-select  class="filter-item" v-model="selectedImport" style="width: 200px"  placeholder="selete impor type">
+        <el-select  class="filter-item" v-model="selectedImport" style="width: 200px"  placeholder="select impor type">
           <el-option v-for="s in  imports" :key="s.value" :label="s.label" :value="s.value">
           </el-option>
         </el-select>

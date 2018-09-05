@@ -218,6 +218,14 @@
                       </el-radio-group> 
                     </el-form-item>
                     <div v-if="tempApi.backend_type==1">
+                      <el-form-item label="HTTP Method">
+                          <el-select  class="filter-item" v-model="tempApi.method" style="width: 200px;margin-top:8px"  placeholder="select method">
+                            <el-option label="GET" value="GET"></el-option>
+                            <el-option  label="POST" value="POST"></el-option>
+                            <el-option  label="PUT" value="PUT"></el-option>
+                            <el-option  label="DELETE" value="DELETE"></el-option>
+                          </el-select>
+                      </el-form-item>
                        <el-form-item label="Addr Type" prop="name" class="first-item">
                         <el-radio-group v-model="tempApi.addr_type">
                           <el-radio :label="1">URL</el-radio>
@@ -1196,6 +1204,7 @@ export default {
          backend_uri: '',
          backend_type: 1,
          mock_data: '',
+         method: 'POST',
          bw_strategy:0,
          retry_strategy:0,
          traffic_api: '',

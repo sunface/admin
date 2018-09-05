@@ -473,7 +473,7 @@ export default {
     handleCreate() {
       if (this.selectedService == '') {
         this.$message({
-            message: 'Selete a service first',
+            message: 'select a service first',
             type: 'warning',
             duration: 3 * 1000,
             center: true

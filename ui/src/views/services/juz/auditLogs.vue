@@ -2,7 +2,7 @@
   <div class="app-container">
       <div class="filter-container">
         <el-tag>select service</el-tag>
-        <el-select  class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="Selete a service">
+        <el-select  class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="Select a service">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>
         </el-select>

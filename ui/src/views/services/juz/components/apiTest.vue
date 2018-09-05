@@ -1,43 +1,37 @@
 <template>
   <div class="api-test">
-    <el-form class="black-form"  ref="dataForm" label-position="left" label-width="70px" >
-        <el-form-item label="API ID"  style="width:300px">
+    <el-form class="black-form"  ref="dataForm" label-position="left" label-width="130px" >
+        <el-form-item label="API ID"  >
             {{api.api_id}}
-        </el-form-item>
-
-        <el-form-item label="Backend URL"  style="width:300px">
+        </el-form-item>        
+        <el-form-item label="Backend URL"  >
+            <span v-if="api.addr_type==1">URL-</span>
+            <span v-else>ETCD-</span>
             {{api.backend_addr}}
+            <span v-if="api.addr_type==2">-{{api.backend_uri}}</span>
         </el-form-item>
-        
-        <el-form-item label="Method">
-            <el-select  class="filter-item" v-model="testMethod" style="width: 200px"  placeholder="选择HTTP Method">
-            <el-option label="GET" value="GET"></el-option>
-            <el-option  label="POST" value="POST"></el-option>
-            <el-option  label="PUT" value="PUT"></el-option>
-            <el-option  label="DELETE" value="DELETE"></el-option>
-            </el-select>
+        <el-form-item label="Debug Mode">
+            <el-radio-group v-model="debugOn" @change="handleDebug">
+                <el-radio :label=true style="color:white">ON</el-radio>
+                <el-radio :label=false style="color:white">OFF</el-radio>
+            </el-radio-group> 
         </el-form-item>
 
-        <el-form-item label="JUZ API Address" style="width:400px">
+        <!-- <el-form-item label="Juz-Api Addr">
             {{tfeAddr}}
-        </el-form-item>
+        </el-form-item> -->
 
 
         <el-form-item label="Params" style="width:600px">
-            <el-input type="textarea" :autosize="{ minRows: 6, maxRows: 8}" :value="makeParam(testParams)" :disabled=true>
+            <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 12}" :value="makeParam(testParams)" @change="paramEnter" style="margin-top:10px">
             </el-input>
+            <el-alert
+                style="margin-top:8px"
+                title="Form params only, e.g. http://test.com/service/api?api_name=test&api_version=1"
+                :closable=false
+                type="warning">
+            </el-alert>
         </el-form-item>
-        <el-form-item label="Add Param">
-            <el-input   style="width:150px" v-model="tempKey">
-                <template slot="prepend">Key</template>
-            </el-input>
-            <el-input  style="width:150px" v-model="tempVal">
-                <template slot="prepend">Val</template>
-            </el-input>
-            <el-button @click="addParam" type="success" size="medium">Add</el-button>
-            <el-button @click="clearParam" type="warning" size="medium">Clear All</el-button>
-        </el-form-item>
-
         <el-form-item label="Output" style="width:600px">
             <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 12}" placeholder="Test Result" v-model="testResult" :disabled=true>
             </el-input>
@@ -52,7 +46,8 @@
 
 <script>
 /* eslint-disable */
-import request from '@/utils/request' 
+import request from '@/utils/request'
+import {proxy} from '@/api/apiProxy'
 export default {
   name: 'apiTest',
    props: {
@@ -65,16 +60,10 @@ export default {
       return {
         tfeAddr: '',
         testResult: '',
-        testMethod: 'GET',
         testPass : '',
         testParams: {}, 
-        tempKey:'',
-        tempVal:'',
 
-        tempBWKey:'',
-        tempBWVal:'',
-
-        inRefresh : false
+        debugOn: false
       }
   },
   watch: {
@@ -83,6 +72,40 @@ export default {
     }
   },
   methods: {
+    handleDebug() {
+        if (this.debugOn) {
+            this.$set(this.testParams,'debug_on',true)
+        } else {
+            this.$set(this.testParams,'debug_on',undefined)
+        }
+    },
+    paramEnter(e) {
+        try {
+            var t = JSON.parse(e)
+            this.testParams = t
+            if (this.testParams.debug_on) {
+                this.debugOn = true
+            } else {
+                this.debugOn = false
+            }
+            // save params
+            var params = {
+                target_app: 'juzManage',
+                target_path: '/manage/api/saveParam',
+                api_id: this.api.api_id,
+                params: e
+             }
+            proxy('POST',params).then(res => {
+            })
+        } catch (e) {
+            this.$message({
+                message: 'Params json invalid',
+                type: 'error',
+                duration: 5 * 1000,
+                center: true
+              })
+        }
+    },
     showName(apiID) {
         return apiID.substring(0,apiID.length-3)
     },
@@ -96,7 +119,6 @@ export default {
             url: '/tools/testApi',
             method: 'POST',
             params: {
-                method: this.testMethod,
                 tfe_addr: process.env.TFE_ADDR,
                 params: this.testParams,
             }
@@ -121,31 +143,36 @@ export default {
              this.testPass = 'false'
           }
             
-        }).catch(error => {
         })
-    },
-    clearParam() {
-      this.testParams = {}
-      this.testParams.api_name=this.showName(this.api.api_id)
-      this.testParams.api_version = this.showVersion(this.api.api_id)
-    },
-    addParam() {
-      this.testParams[this.tempKey] = this.tempVal
-      this.tempKey = ''
-      this.tempVal = ''
     },
     makeParam(p) {
       return JSON.stringify(p,null,'\t')
     },
     initTest() {
+      this.testParams = {}
       this.tfeAddr = process.env.TFE_ADDR
       this.testResult = ''
-      this.testPass = ''      
+      this.testPass = ''
       this.testParams.api_name=this.showName(this.api.api_id)
-      this.testParams.api_version = this.showVersion(this.api.api_id)
+      this.testParams.api_version = this.showVersion(this.api.api_id)  
+      // load old params
+      var params = {
+          target_app: 'juzManage',
+          target_path: '/manage/api/queryParam',
+          api_id: this.api.api_id
+        }
+      proxy('GET',params).then(res => {
+          console.log(res.data.data)
+        if (res.data.data != '') {
+            this.testParams = JSON.parse(res.data.data)
+            if (this.testParams.debug_on) {
+                this.debugOn = true
+            }
+        }
+      })
     }
   },
-  created() {
+  mounted() {
       this.initTest()
   },
   destroyed() {
