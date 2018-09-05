@@ -6,7 +6,7 @@
         </el-form-item>
 
         <el-form-item label="Backend URL"  style="width:300px">
-            {{api.route_addr}}
+            {{api.backend_addr}}
         </el-form-item>
         
         <el-form-item label="Method">

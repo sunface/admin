@@ -23,12 +23,12 @@
               <span>{{scope.row.name}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="180" align="left" label="Update Date" prop="route_addr">
+          <el-table-column width="180" align="left" label="Update Date">
             <template slot-scope="scope">
               <span>{{scope.row.modify_date}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="150" align="left" label="Status" prop="route_addr">
+          <el-table-column width="150" align="left" label="Status">
             <template slot-scope="scope">
               <span v-if="scope.row.status==0"><el-tag type="warning" style="border:none;">Off</el-tag></span>
               <span v-else><el-tag type="success" style="border:none;">On</el-tag></span>

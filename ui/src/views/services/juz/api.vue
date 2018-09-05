@@ -36,9 +36,9 @@
               <span>{{scope.row.app}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="300" align="left" label="target url" prop="route_addr">
+          <el-table-column width="300" align="left" label="target url" >
             <template slot-scope="scope">
-              <span>{{scope.row.route_addr}}</span>
+              <span>{{scope.row.backend_addr}}</span>
             </template>
           </el-table-column>
           <el-table-column width="250" align="left" label="status" >
@@ -146,7 +146,7 @@
                     <el-form-item label="Service">
                       {{tempApi.service}}
                     </el-form-item>
-                    <el-form-item label="Application">
+                    <el-form-item label="Application" required>
                       <el-select clearable class="filter-item" v-model="tempApi.app" style="width: 200px"  placeholder="please choose">
                             <el-option v-for="s in  apps" :key="s.name" :label="s.name" :value="s.name">
                             </el-option>
@@ -183,14 +183,14 @@
                         type="warning">
                       </el-alert>
                     </el-form-item>
-                    <el-form-item v-if="defineStatus=='create'" label="API Name" prop="name" class="first-item">
+                    <el-form-item v-if="defineStatus=='create'" label="API Name"  class="first-item" required>
                       <span v-if="tempApi.path_type==0">{{tempApi.service}}.</span>
                       <el-tooltip class="no-border-input" :content="apiNameTooltip()" placement="top">
                           <el-input  v-model="tempApi.api_id" placeholder=""  style="width:250px">
                           </el-input>
                        </el-tooltip>
                     </el-form-item>
-                    <el-form-item v-else label="API Name" prop="name" class="first-item">
+                    <el-form-item v-else label="API Name" class="first-item" required>
                       {{showName(tempApi.api_id)}}
                     </el-form-item>
                     <el-form-item label="Version">
@@ -205,24 +205,50 @@
               </div>
               <div v-show="apiDefineStep==1">
                   <el-form label-position="left" label-width="150px" size="small">
-                    <el-form-item label="Proxy Type" prop="route_type">
+                    <el-form-item label="Route Type" prop="route_type">
                       <el-select  class="filter-item" v-model="tempApi.route_type" style="width: 150px"  placeholder="please choose">
                         <el-option label="Direct" :value=1></el-option>
                         <el-option  label="Redirect" :value=2></el-option>
                       </el-select>
                     </el-form-item>
                     <el-form-item label="Backend Type" prop="name" class="first-item">
-                      <el-radio-group v-model="tempApi.route_proto">
+                      <el-radio-group v-model="tempApi.backend_type">
                         <el-radio :label="1">HTTP(s)</el-radio>
                         <el-radio :label="2">Mock</el-radio>
                       </el-radio-group> 
                     </el-form-item>
-                    <div v-if="tempApi.route_proto==1">
-                      <el-form-item label="Backend URL" required>
-                        <el-tooltip content="The application url you want to access" placement="top">
-                            <el-input v-model="tempApi.route_addr"></el-input>
-                        </el-tooltip>
+                    <div v-if="tempApi.backend_type==1">
+                       <el-form-item label="Addr Type" prop="name" class="first-item">
+                        <el-radio-group v-model="tempApi.addr_type">
+                          <el-radio :label="1">URL</el-radio>
+                          <el-radio :label="2">ETCD</el-radio>
+                        </el-radio-group> 
                       </el-form-item>
+                      <div v-if="tempApi.addr_type==1">
+                        <el-form-item label="Backend Addr" required>
+                          <el-tooltip content="The application url you want to access" placement="top">
+                              <el-input v-model="tempApi.backend_addr" placeholder="http://"></el-input>
+                          </el-tooltip>
+                        </el-form-item>
+                      </div>
+                      <div v-else>
+                        <el-form-item label="Backend Addr" required>
+                          <el-select clearable class="filter-item" v-model="tempService" @change='handleTempService' style="width: 160px"  placeholder="select service">
+                            <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
+                            </el-option>
+                          </el-select>
+                          <el-select clearable class="filter-item" v-model="tempApi.backend_addr" style="width: 200px"  placeholder="select app">
+                            <el-option v-for="s in  tempApps" :key="s.name" :label="s.name" :value="s.name">
+                            </el-option>
+                          </el-select>
+                        </el-form-item>
+                        <el-form-item label="Backend URI" required>
+                          <el-tooltip content="Http uri,e.g. if target is 'http://test.com/a/b',here you shold fill in '/a/b'" placement="top">
+                              <el-input v-model="tempApi.backend_uri" placeholder="/a/b"></el-input>
+                          </el-tooltip>
+                        </el-form-item>
+                      </div>
+                    
                       <el-form-item label="Header,Cookie">
                           <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
                       </el-form-item>
@@ -598,10 +624,30 @@ export default {
         batchTraffic: '',
         selectApis: [],
 
-        apps: []
+        apps: [],
+
+        tempService: '',
+        tempApps : []
       }
   },
   methods: {
+    handleTempService(s) {
+      this.tempService = s
+      if (s == '') {
+        this.tempApps = []
+        return 
+      }
+      // load apps
+      request({
+        url: '/infra/app/query',
+        method: 'GET', 
+        params: {
+            service: s
+        }
+      }).then(res => {
+          this.tempApps = res.data.data
+      })
+    },
     apiGrafanaAddr(api_id) {
       var addr = process.env.API_GRAFANA + api_id
        return  addr
@@ -1068,6 +1114,7 @@ export default {
         return 
       }
       
+
       if (this.tempApi.app == '') {
         this.$message({
               message: "You must choose a application the api belongs",
@@ -1138,13 +1185,16 @@ export default {
       this.apiDefineStep = 0
       this.tempApi = {
          service: this.selectedService,
+         app: '',
          api_id: '',
          version: 1,
          path_type:0,
-         desc:''
-,        route_type: 1,
-         route_addr: 'http://',
-         route_proto: 1,
+         desc:'',        
+         route_type: 1,
+         addr_type: 1,
+         backend_addr: '',
+         backend_uri: '',
+         backend_type: 1,
          mock_data: '',
          bw_strategy:0,
          retry_strategy:0,

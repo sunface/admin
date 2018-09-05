@@ -11,6 +11,9 @@
         <el-form-item label="Service" class="first-item">
             {{api.service}}
         </el-form-item>
+        <el-form-item label="App" class="first-item">
+            {{api.app}}
+        </el-form-item>
         <el-form-item label="API ID"  class="first-item">
             {{api.api_id}}
         </el-form-item>
@@ -38,24 +41,31 @@
     </div>
     <el-form   :class="{'black-form':isBlackForm()}" label-position="left" label-width="150px" size="small">
         <el-form-item label="Backend Type" class="first-item">
-        <span v-if="api.route_proto==1">HTTP(s)</span>
-        <span v-if="api.route_proto==2">Mock</span>
+        <span v-if="api.backend_type==1">HTTP(s)</span>
+        <span v-if="api.backend_type==2">Mock</span>
         </el-form-item>
-        <div v-if="api.route_proto==1">
-        <el-form-item label="Backend URL">
-            {{api.route_addr}}
-        </el-form-item>
-        <el-form-item label="Header,Cookie">
-            <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
-        </el-form-item>
-        <el-form-item label="Params">
-            <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
-        </el-form-item>
-        </div>
-        <div v-else>
-        <el-form-item label="Mock Data">
-            <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}"  v-model="api.mock_data"></el-input>
-        </el-form-item>    
+        <div v-if="api.backend_type==1">
+            <el-form-item label="Addr Type">
+                <span v-if="api.addr_type==1">URL</span>
+                <span v-else>ETCD</span>
+            </el-form-item>
+            <el-form-item label="Backend Addr">
+                {{api.backend_addr}}
+            </el-form-item>
+            <el-form-item label="Backend Uri" v-if="api.addr_type==2">
+                {{api.backend_uri}}
+            </el-form-item>
+            <el-form-item label="Header,Cookie">
+                <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
+            </el-form-item>
+            <el-form-item label="Params">
+                <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
+            </el-form-item>
+            </div>
+            <div v-else>
+            <el-form-item label="Mock Data">
+                <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}"  v-model="api.mock_data"></el-input>
+            </el-form-item>    
         </div>
     </el-form>
     <div>
