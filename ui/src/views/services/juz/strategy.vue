@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        <el-tag>select service</el-tag>
+        <el-tag> service</el-tag>
         <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="select a service">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>
         </el-select>
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"   type="primary" icon="el-icon-edit">Add Strategy</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"   type="success" icon="el-icon-edit">Add Strategy</el-button>
       </div>
       
       <div class="table">
@@ -36,19 +36,19 @@
           </el-table-column>
           <el-table-column align="center" label="Operate" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button size="small" type="text" @click="handleEdit(scope.row)">Edit</el-button>
-              <el-button  class="green-button" size="small" type="text" @click="handleCopy(scope.row,$event)">Copy config</el-button>
-              <el-button size="small" type="text" @click="changeStatus(scope.row)">
+              <span  class="table-op-btn" @click="handleEdit(scope.row)">Edit</span>
+              <span  class="table-op-btn"  @click="handleCopy(scope.row,$event)">CopyConfig</span>
+              <span class="table-op-btn" @click="changeStatus(scope.row)">
                 <span v-if="scope.row.status==0">Start</span>
                 <span v-else>Stop</span>
-              </el-button>
-              <el-button  size="small" type="text" @click="delStrategy(scope.row)">Delete</el-button>
+              </span>
+              <span  class="table-op-btn" @click="delStrategy(scope.row)">Delete</span>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <!-- 策略面板 -->
-      <el-dialog :title="dialogTitle" :visible.sync="bwlistVisible">
+      <el-dialog  class="mf-dialog" :title="dialogTitle" :visible.sync="bwlistVisible">
         <el-form  label-position="left" label-width="120px" style='width: 650px; margin-left:50px;' size="mini">
             <div class="form-block">
                 <span>Basic</span>
@@ -82,12 +82,12 @@
                         <el-radio :label="1">IP</el-radio>
                         <el-radio :label="2">Param</el-radio>
                     </el-radio-group>
-                    <div>
+                    <div style="margin-top-5">
                         <el-input  placeholder="Key" style="width:80px" v-model="tempBWKey" :disabled="selbwType==1">
                         </el-input>
                         <el-input  placeholder="Val" style="width:160px" v-model="tempBWVal">
                         </el-input>
-                        <el-button @click="addBW" type="success" size="mini" icon="el-icon-plus" circle style="margin-left:10px"></el-button>
+                        <el-button @click="addBW" size="mini" icon="el-icon-plus" circle style="margin-left:10px"></el-button>
                     </div>
                 </el-form-item>
                 <el-form-item label="Current List" v-if="tempStrategy.sub_type==1 || tempStrategy.sub_type==2">
@@ -513,7 +513,7 @@ export default {
     },
     loadServices() {
       request({
-          url: '/infra/service/query',
+          url: '/ops/service/query',
           method: 'GET', 
           params: {
           }

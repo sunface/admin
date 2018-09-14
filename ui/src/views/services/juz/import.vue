@@ -14,8 +14,8 @@
                     type="warning">
                 </el-alert>
                 <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 50}" placeholder="Config JSON" v-model="content"></el-input>
-                <el-button type="success" style="margin-top:6px" @click="beginImport('edit')">Update Target</el-button>
-                <el-button  style="margin-top:6px" @click="beginImport('create')">Create Target</el-button>
+                <el-button  style="margin-top:6px" @click="beginImport('edit')">Update</el-button>
+                <el-button type="success" style="margin-top:6px" @click="beginImport('create')">Create</el-button>
             </el-col>
         </el-row>
       </div>

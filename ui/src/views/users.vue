@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">Add User</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="success" icon="el-icon-edit">Add User</el-button>
     </div>
 
     <div class="table">
-      <el-table  :data="users" border fit highlight-current-row style="width: 100%;min-height:1000px;"  :default-sort = "{prop: 'create_date', order: 'ascending'}">
+      <el-table  :data="users" border fit highlight-current-row style="width: 100%"  :default-sort = "{prop: 'create_date', order: 'ascending'}">
         <el-table-column align="center" label="user name" width="250" prop="name" sortable>
           <template slot-scope="scope">
             <span>{{scope.row.username}}</span>
@@ -31,7 +31,7 @@
     </div>
 
 
-    <el-dialog title="Add User" :visible.sync="createVisible">
+    <el-dialog  class="mf-dialog"  title="Add User" :visible.sync="createVisible">
         <el-form  label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
           <el-form-item label="user name">
             <el-input v-model="tempCreate.username" placeholder="only support alphabet and numeric"></el-input>
@@ -56,7 +56,7 @@
         </div>
       </el-dialog>
     
-   <el-dialog title="Edit User" :visible.sync="editVisible">
+   <el-dialog class="mf-dialog"  title="Edit User" :visible.sync="editVisible">
         <el-form  label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
           <el-form-item label="user name">
              {{tempEdit.username}}

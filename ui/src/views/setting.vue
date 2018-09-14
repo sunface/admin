@@ -2,7 +2,7 @@
   <div class="app-container">
         <el-form  label-position="left" label-width="120px" style="width: 650px;margin-left:15px" size="mini">
             <div class="form-block" style="padding:15px 15px">
-              <el-tag  size="large" style="border:none;font-size:14px">Set my password</el-tag>
+              <el-tag  size="small" style="border:none;font-size:14px">My pw</el-tag>
               <el-form-item label="old" style="margin-top:25px">
                 <el-input  v-model="oldPw" placeholder="input the old pw" style="width:250px">
                 </el-input>
@@ -20,7 +20,7 @@
 
 
             <div class="form-block" style="padding:15px 15px" v-if="priv=='admin' || priv=='super_admin'">
-              <el-tag  size="large" style="border:none;font-size:14px">Set user's pw</el-tag>
+              <el-tag  size="small" style="border:none;font-size:14px">User's pw</el-tag>
               <el-form-item label="username" style="margin-top:25px">
                 <el-select class="filter-item" v-model="resetUsername" style="width: 200px"  placeholder="select user" filterable>
                   <el-option v-for="u in users" :key="u.id" :label="u.username" :value="u.username"></el-option>

@@ -28,10 +28,10 @@
               </span>
               <span v-if="scope.row.target_type==4">{{scope.row.content}}</span>
               <span v-if="scope.row.target_type==3">
-                  <i class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="showStrategy(scope.row.content)"></i> 
+                  <i class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="showStrategy(scope.row.content)"></i> 
               </span>
               <span v-if="scope.row.target_type==2">
-                  <i v-if="scope.row.content!=''" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="viewApi(scope.row.content)"></i> 
+                  <i v-if="scope.row.content!=''" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="viewApi(scope.row.content)"></i> 
               </span>
               <span v-if="scope.row.target_type==5">
                   <el-popover
@@ -39,7 +39,7 @@
                     width="800"
                     trigger="click">
                     {{JSON.parse(scope.row.content)}}
-                    <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a"></i> 
+                    <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px"></i> 
                 </el-popover>
               </span>
             </template>
@@ -65,7 +65,7 @@
           </el-table-column>
           <el-table-column align="center" label="Manage" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button  v-if="scope.row.content!=''" class="green-button"  type="text" @click="handleCopy(scope.row.content,$event)">Copy config</el-button>
+              <span  v-if="scope.row.content!=''" class="table-op-btn"   @click="handleCopy(scope.row.content,$event)">CopyConfig</span>
             </template>
           </el-table-column>
         </el-table>
@@ -78,25 +78,25 @@
         </el-pagination>
       </div>
 
-      <el-dialog  title="API Define" :visible.sync="apiViewVisible" top="20px">
+      <el-dialog  class="mf-dialog"  title="API Define" :visible.sync="apiViewVisible" top="20px">
         <apiDefine :api="tempApi"></apiDefine>
         <div slot="footer" class="dialog-footer">
           <el-button @click="apiViewVisible = false">Close</el-button>
         </div>
       </el-dialog>
-      <el-dialog  title="White/Black List" :visible.sync="bwVisible" top="20px">
+      <el-dialog class="mf-dialog"  title="White/Black List" :visible.sync="bwVisible" top="20px">
         <bwlist :strategy="strategy"></bwlist>
         <div slot="footer" class="dialog-footer">
           <el-button @click="bwVisible = false">Close</el-button>
         </div>
       </el-dialog>
-       <el-dialog  title="Timout/Retry" :visible.sync="retryVisble" top="20px">
+       <el-dialog  class="mf-dialog"  title="Timout/Retry" :visible.sync="retryVisble" top="20px">
         <retry :strategy="strategy"></retry>
         <div slot="footer" class="dialog-footer">
           <el-button @click="retryVisble = false">Close</el-button>
         </div>
       </el-dialog>
-      <el-dialog  title="Traffic Control" :visible.sync="trafficVisible" top="20px">
+      <el-dialog class="mf-dialog"  title="Traffic Control" :visible.sync="trafficVisible" top="20px">
         <traffic :strategy="strategy"></traffic>
         <div slot="footer" class="dialog-footer">
           <el-button @click="trafficVisible = false">Close</el-button>

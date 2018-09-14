@@ -5,6 +5,16 @@
 @import './sidebar.scss';
 @import './btn.scss';
 
+
+$--color-primary: #2d8cf0;
+$--color-success: rgb(19, 203, 110);
+
+
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";
+
+
+
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
@@ -128,7 +138,7 @@ code {
 
 //main-container全局样式
 .app-container {
-  padding: 20px;
+  padding: 20px 25px;
 }
 
 .components-container {
@@ -227,14 +237,11 @@ code {
   .el-table__row:hover {
     color: #333
   }
-  .green-button {
-    color: #67c23a
-  }
   .yellow-button {
     color: rgb(255, 208, 75);
   }
   th, tr {
-    background: #545c64;
+    background: rgb(57, 79, 90);
     color: white;
     height: 60px;
     td {
@@ -244,11 +251,11 @@ code {
 
   .el-pagination {
     button {
-      background: #545c64;
+      background: rgb(57, 79, 90);
     }
     .el-pager {
       .number {
-        background: #545c64;
+        background: rgb(57, 79, 90);
         color: white
       }
       .number.active {
@@ -265,7 +272,7 @@ code {
 
 .black-dialog {
   .el-dialog.is-fullscreen {
-    background: #545c64;
+    background: rgb(57, 79, 90);
     color: #fff !important
   }
     .el-dialog__title {
@@ -301,4 +308,9 @@ code {
 }
 .margin-left-20 {
   margin-left:20px
+}
+
+
+.icon-primary {
+  color: $green;
 }

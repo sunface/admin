@@ -4,12 +4,12 @@
         <!-- <el-input  style="width: 200px;" class="filter-item" placeholder="Service">
         </el-input>
         <el-button class="filter-item" type="primary" style="margin-left: 10px;" v-waves icon="el-icon-search" @click="handleCreate">搜索</el-button> -->
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="primary" icon="el-icon-plus">Add Service</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-plus">Add Service</el-button>
         <!-- <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">导出</el-button> -->
       </div>
 
       <div class="table">
-        <el-table  :data="services" border fit highlight-current-row style="width: 100%;min-height:1000px;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
+        <el-table  :data="services" border fit highlight-current-row style="width: 100%"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
           <el-table-column align="center" label="Name" width="250" prop="name" sortable>
             <template slot-scope="scope">
               <span>{{scope.row.name}}</span>
@@ -151,7 +151,7 @@ export default {
           type: 'warning'
         }).then(() => {
             request({
-                url: '/infra/service/delUser',
+                url: '/ops/service/delUser',
                 method: 'POST', 
                 params: {
                     service: this.tempEdit.name,
@@ -168,7 +168,7 @@ export default {
     },
     addServiceUser() {
         request({
-          url: '/infra/service/addUser',
+          url: '/ops/service/addUser',
           method: 'POST', 
           params: {
             service: this.tempEdit.name,
@@ -197,7 +197,7 @@ export default {
     },
     editSubmit() {
         request({
-          url: '/infra/service/update',
+          url: '/ops/service/update',
           method: 'POST', 
           params: {
             service: this.tempEdit.name,
@@ -219,7 +219,7 @@ export default {
     },
     createSubmit() {
         request({
-          url: '/infra/service/create',
+          url: '/ops/service/create',
           method: 'POST', 
           params: {
             service: this.tempCreate.name,
@@ -242,7 +242,7 @@ export default {
     },
     loadData() {
        request({
-          url: '/infra/service/query',
+          url: '/ops/service/query',
           method: 'GET'
         }).then(res => {
             this.services = res.data.data
@@ -250,7 +250,7 @@ export default {
     },
     loadServiceUsers() {
         request({
-          url: '/infra/service/queryUser',
+          url: '/ops/service/queryUser',
           method: 'GET',
           params: {
               service: this.tempEdit.name

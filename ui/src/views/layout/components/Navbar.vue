@@ -1,42 +1,44 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
-    <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
+  <el-menu class="navbar" mode="horizontal" style="padding-top:7px">
 
-    <breadcrumb class="breadcrumb-container"></breadcrumb>
+      <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
 
-    <div class="right-menu">
-      <el-tooltip effect="dark" content="当前环境" placement="bottom">
-        <div class="right-menu-item" style="vertical-align:top">
-            <el-tag type="success">{{env()}}</el-tag>
-        </div>
-      </el-tooltip>
-      <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
-        <screenfull class="screenfull right-menu-item"></screenfull>
-      </el-tooltip>
+      <breadcrumb class="breadcrumb-container"></breadcrumb>
 
-      <lang-select class="international right-menu-item"></lang-select>
+      <div class="right-menu">
+        <!-- <el-tooltip effect="dark" content="当前环境" placement="bottom">
+          <div class="right-menu-item" style="vertical-align:top">
+              <el-tag type="success">{{env()}}</el-tag>
+          </div>
+        </el-tooltip> -->
+        <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
+          <screenfull class="screenfull right-menu-item"></screenfull>
+        </el-tooltip>
 
-      <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
-        <theme-picker class="theme-switch right-menu-item"></theme-picker>
-      </el-tooltip>
+        <lang-select class="international right-menu-item"></lang-select>
 
-      <el-dropdown class="avatar-container right-menu-item" trigger="click">
-        <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
-          <i class="el-icon-caret-bottom"></i>
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              {{$t('navbar.dashboard')}}
+        <!-- <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
+          <theme-picker class="theme-switch right-menu-item"></theme-picker>
+        </el-tooltip> -->
+
+        <el-dropdown class="avatar-container right-menu-item" trigger="click">
+          <div class="avatar-wrapper">
+            <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
+            <i class="el-icon-caret-bottom"></i>
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <router-link to="/">
+              <el-dropdown-item>
+                {{$t('navbar.dashboard')}}
+              </el-dropdown-item>
+            </router-link>
+            <el-dropdown-item divided>
+              <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
             </el-dropdown-item>
-          </router-link>
-          <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+
   </el-menu>
 </template>
 
@@ -87,14 +89,16 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 50px;
-  line-height: 50px;
+  border:none;
+  height: 64px;
+  line-height: 60px;
   border-radius: 0px !important;
   .hamburger-container {
     line-height: 58px;
     height: 50px;
     float: left;
     padding: 0 10px;
+    fill:#666;
   }
   .breadcrumb-container{
     float: left;
@@ -118,6 +122,7 @@ export default {
     }
     .international{
       vertical-align: top;
+      margin-top: -5px;
     }
     .theme-switch {
       vertical-align: 15px;

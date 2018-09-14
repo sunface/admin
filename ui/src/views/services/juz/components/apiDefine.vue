@@ -88,7 +88,7 @@
                     width="800"
                     trigger="click">
                     <paramRules :rules="rules"></paramRules>
-                    <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getParamRules()"></i> 
+                    <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getParamRules()"></i> 
                 </el-popover>
             </el-form-item>
         </div>
@@ -118,7 +118,7 @@
                     width="600"
                     trigger="click">
                     <bwlist :strategy="strategy"></bwlist>
-                    <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(api.bw_strategy)"></i> 
+                    <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getStrategy(api.bw_strategy)"></i> 
                 </el-popover>
                 
             </el-form-item>
@@ -134,7 +134,7 @@
                     width="600"
                     trigger="click">
                     <retry :strategy="strategy"></retry>
-                    <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(api.retry_strategy)"></i> 
+                    <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px " @click="getStrategy(api.retry_strategy)"></i> 
                 </el-popover>
             </el-form-item>
             <el-form-item v-else label="no strategy"  class="first-item">
@@ -149,7 +149,7 @@
                     width="600"
                     trigger="click">
                     <traffic :strategy="strategy"></traffic>
-                    <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(api.traffic_strategy)"></i> 
+                    <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getStrategy(api.traffic_strategy)"></i> 
                 </el-popover>
             </el-form-item>
             <el-form-item v-else label="no strategy"  class="first-item">

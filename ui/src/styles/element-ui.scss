@@ -50,7 +50,13 @@
    left: 0;
    position: relative;
    margin: 0 auto;
+  
  }
+ .mf-dialog {
+  .el-dialog {
+    background: rgb(242, 246, 248) !important
+  }
+ }  
 
  //文章页textarea修改样式
  .article-textarea {
@@ -79,4 +85,9 @@
   a{
     display: block
   }
+}
+
+
+.el-tag {
+  border: none !important;
 }

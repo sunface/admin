@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        <el-tag>select service</el-tag>
+        <el-tag> service</el-tag>
         <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 160px"  placeholder="请选择Service">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>
         </el-select>
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="primary" icon="el-icon-edit">Create API</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-edit">Create API</el-button>
 
        
 
@@ -15,7 +15,7 @@
           <el-button class="filter-item" style="margin-right: 20px;" @click="handleBatchStrategy"  v-waves icon="el-icon-bell">Batch Strategy</el-button>
           <el-input  style="width: 250px;" class="filter-item" placeholder="fuzzing search" v-model="q" clearable @clear="loadApis(1)" @keyup.enter.native="loadApis(1)" >
           </el-input>
-          <el-button class="filter-item" type="success" v-waves icon="el-icon-search"   @click="loadApis(1)"></el-button>
+          <el-button class="filter-item" type="text" v-waves icon="el-icon-search"   @click="loadApis(1)"></el-button>
         </span>
 
       </div>
@@ -48,17 +48,17 @@
           </el-table-column>
           <el-table-column width="250" align="left" label="status" >
              <template slot-scope="scope">
-                <div><el-tag type="success" size="mini">editVer</el-tag> <span style="color:#337ab7;font-size:13px;">{{scope.row.revise_version}}</span></div>
-                <div v-if="scope.row.release_version!=''" style="margin-top:3px"><el-tag  size="mini" :type="calcRelease(scope.row)">releaseVer</el-tag>  <span style="color:#337ab7;font-size:13px;">{{scope.row.release_version}}</span></div>
+                <div><el-tag type="success" size="mini" >edit</el-tag> <span style="color:#337ab7;font-size:13px;">{{scope.row.revise_version}}</span></div>
+                <div v-if="scope.row.release_version!=''" style="margin-top:3px"><el-tag  size="mini"   :type="calcRelease(scope.row)">release</el-tag>  <span style="color:#337ab7;font-size:13px;">{{scope.row.release_version}}</span></div>
                 <div v-else style="margin-top:3px"><el-tag type="warning" size="mini">not released</el-tag></div>
             </template>
           </el-table-column>
           <el-table-column align="center" label="operate" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button  v-if="scope.row.release_version!=scope.row.revise_version && scope.row.release_version!=''" type="text" @click="releaseAPI(scope.row)">release</el-button>
-              <el-button  v-if="scope.row.release_version=='' " type="text" @click="releaseAPI(scope.row)">release</el-button>
-              <el-button  type="text"  @click="handleManage(scope.row)">manage</el-button>
-              <el-button  class="green-button"  type="text" @click="handleCopy(scope.row,$event)">copy config</el-button>
+              <span class="table-op-btn" v-if="scope.row.release_version!=scope.row.revise_version && scope.row.release_version!=''" @click="releaseAPI(scope.row)">release</span>
+              <span  class="table-op-btn" v-if="scope.row.release_version=='' " @click="releaseAPI(scope.row)">release</span>
+              <span  class="table-op-btn" @click="handleManage(scope.row)">manage</span>
+              <span   class="table-op-btn" @click="handleCopy(scope.row,$event)">copyConfig</span>
             </template>
           </el-table-column>
         </el-table>
@@ -69,7 +69,7 @@
             :total="totalApis">
         </el-pagination>
       </div>
-      <el-dialog class="black-dialog" :title="'Manage API ：'+tempApi.api_id" :visible.sync="apiManageVisible" top="40px"  :fullscreen=true style="backgroud:#545c64 !important"> 
+      <el-dialog class="black-dialog" :title="'Manage API ：'+tempApi.api_id" :visible.sync="apiManageVisible" top="40px"  :fullscreen=true style="backgroud:rgb(57, 79, 90) !important"> 
           <el-row :gutter="20" style="margin-top:40px;">
             <el-col :span=3 :offset=1>
               <el-menu
@@ -77,7 +77,7 @@
                 class="el-menu-vertical-demo"
                 @select="onManageSelect"
                 text-color="#fff"
-                background-color="#545c64"
+                background-color="rgb(57, 79, 90)"
                 active-text-color="#ffd04b"
                 ref="apiMenu"
                 >
@@ -137,7 +137,7 @@
           </el-row>
       </el-dialog>
 
-      <el-dialog :title="apiTitle" :visible.sync="apiDefineVisible" top="40px" :before-close="cancelAPIDefine" :fullscreen=false> 
+      <el-dialog  class="mf-dialog" :title="apiTitle" :visible.sync="apiDefineVisible" top="40px" :before-close="cancelAPIDefine" :fullscreen=false> 
         <el-steps :active="apiDefineStep" finish-status="success">
           <el-step title="Basic"></el-step>
           <el-step title="Request"></el-step>
@@ -348,7 +348,7 @@
                             width="600"
                             trigger="click">
                             <bwlist :strategy="strategy"></bwlist>
-                            <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(selBW)"></i> 
+                            <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getStrategy(selBW)"></i> 
                           </el-popover>
                         </el-form-item>
                       </div>
@@ -365,7 +365,7 @@
                             width="600"
                             trigger="click">
                             <retry :strategy="strategy"></retry>
-                            <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(selRetry)"></i> 
+                            <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getStrategy(selRetry)"></i> 
                         </el-popover>
                         </el-form-item>
                       </div>
@@ -382,7 +382,7 @@
                             width="600"
                             trigger="click">
                             <traffic :strategy="strategy"></traffic>
-                            <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(selTraffic)"></i> 
+                            <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px;icon-primary" @click="getStrategy(selTraffic)"></i> 
                         </el-popover>
                         </el-form-item>
                       </div>
@@ -400,6 +400,7 @@
 
 
       <el-dialog
+        class="mf-dialog" 
         title="Param Verify"
         :fullscreen=true
         :visible.sync="veryfyVisible"
@@ -462,7 +463,7 @@
       </el-dialog>
 
       <!-- 批量设置策略 -->
-      <el-dialog title="Batch Strategy Setting" :visible.sync="batchStrategyVisible">
+      <el-dialog title="Batch Strategy Setting" class="mf-dialog"  :visible.sync="batchStrategyVisible">
         <el-form  label-position="left" label-width="120px" style='width: 650px; margin-left:50px;' size="mini">
             <div class="form-block">
               <span>Batch Strategy</span>
@@ -491,7 +492,7 @@
                       width="600"
                       trigger="click">
                       <bwlist :strategy="strategy"></bwlist>
-                      <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(batchBW)"></i> 
+                      <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getStrategy(batchBW)"></i> 
                     </el-popover>
                   </el-form-item>
                 </div>
@@ -508,7 +509,7 @@
                       width="600"
                       trigger="click">
                       <retry :strategy="strategy"></retry>
-                      <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(batchRetry)"></i> 
+                      <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px;" @click="getStrategy(batchRetry)"></i> 
                   </el-popover>
                   </el-form-item>
                 </div>
@@ -525,7 +526,7 @@
                       width="600"
                       trigger="click">
                       <traffic :strategy="strategy"></traffic>
-                      <i slot="reference" class="el-icon-view hover-cursor" style="margin-left: 8px;color: #67c23a" @click="getStrategy(batchTraffic)"></i> 
+                      <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getStrategy(batchTraffic)"></i> 
                   </el-popover>
                   </el-form-item>
                 </div>
@@ -652,7 +653,7 @@ export default {
       }
       // load apps
       request({
-        url: '/infra/app/query',
+        url: '/ops/app/query',
         method: 'GET', 
         params: {
             service: s
@@ -1278,7 +1279,7 @@ export default {
     },
     loadApps() {
         request({
-          url: '/infra/app/query',
+          url: '/ops/app/query',
           method: 'GET', 
           params: {
               service: this.selectedService
@@ -1289,7 +1290,7 @@ export default {
     },
     loadServices() {
         request({
-          url: '/infra/service/query',
+          url: '/ops/service/query',
           method: 'GET', 
           params: {
           }

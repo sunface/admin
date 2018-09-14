@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-        <el-tag>select service</el-tag>
+        <el-tag>service</el-tag>
         <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="请选择Service">
             <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name"></el-option>
         </el-select>
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="primary" icon="el-icon-plus">Add App</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-plus">Add App</el-button>
     </div>
 
     <div class="table">
-        <el-table  :data="apps" border fit highlight-current-row style="width: 100%;min-height:1000px;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
+        <el-table  :data="apps" border fit highlight-current-row style="width: 100%;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
             <el-table-column align="center" label="Name" width="250" prop="name" sortable>
             <template slot-scope="scope">
-                <span>{{scope.row.name}}</span>
+                <span>{{scope.row.name}}</span> 
             </template>
             </el-table-column>
             <el-table-column width="200" align="center" label="Service" sortable>
@@ -98,7 +98,7 @@ export default {
   methods: {
     editSubmit() {
         request({
-          url: '/infra/app/update',
+          url: '/ops/app/update',
           method: 'POST', 
           params: {
             app: this.tempEdit.name,
@@ -109,7 +109,7 @@ export default {
             this.editVisible = false
             this.loadApps()
             this.$message({
-                message: '编辑成功',
+                message: 'eidt ok',
                 type: 'success',
                 duration: 3 * 1000,
                 center: true
@@ -122,7 +122,7 @@ export default {
     },
     createSubmit() {
         request({
-          url: '/infra/app/create',
+          url: '/ops/app/create',
           method: 'POST', 
           params: {
             app: this.tempCreate.name,
@@ -154,7 +154,7 @@ export default {
     },
     loadServices() {
         request({
-          url: '/infra/service/query',
+          url: '/ops/service/query',
           method: 'GET', 
           params: {
           }
@@ -164,7 +164,7 @@ export default {
     },
     loadApps() {
         request({
-          url: '/infra/app/query',
+          url: '/ops/app/query',
           method: 'GET', 
           params: {
               service: this.selectedService

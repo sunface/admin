@@ -25,9 +25,10 @@ export default {
 <style scoped>
 .app-main {
   /*84 = navbar + tags-view = 50 +34 */
-  min-height: calc(100vh - 84px);
+  min-height: calc(100vh - 55px);
   position: relative;
   overflow: hidden;
+  background: rgb(242, 246, 248);
 }
 </style>
 

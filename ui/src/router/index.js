@@ -51,25 +51,35 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/infra',
+    path: '/ops',
     component: Layout,
-    redirect: '/infra/service',
-    alwaysShow: true, // will always show the root menu
-    meta: { title: 'Infra',icon: 'component'},
+    redirect: '/ops/service',
+    meta: { title: 'Ops',icon: 'component',noCache: true},
     children: [{
       path: 'service',
-      component: () => import('@/views/infra/service'),
+      component: () => import('@/views/ops/service'),
       name: 'service',
       meta: {
-        title: 'Service'
+        title: 'Service',
+        noCache: true
       }
     }, 
     {
       path: 'application',
-      component: () => import('@/views/infra/application'),
+      component: () => import('@/views/ops/application'),
       name: 'application',
       meta: {
-        title: 'Application'
+        title: 'Application',
+        noCache: true
+      }
+    },
+    {
+      path: 'server',
+      component: () => import('@/views/ops/server'),
+      name: 'server',
+      meta: {
+        title: 'Cloud Server',
+        noCache: true
       }
     }
   ]
