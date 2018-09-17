@@ -26,13 +26,13 @@ import Layout from '@/views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
-  { path: '/401', component: () => import('@/views/errorPage/401'), hidden: true },
+  { path: '/adminui/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/adminui/404', component: () => import('@/views/errorPage/404'), hidden: true },
+  { path: '/adminui/401', component: () => import('@/views/errorPage/401'), hidden: true },
   {
-    path: '',
+    path: '/adminui',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/adminui/dashboard',
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index'),
@@ -51,9 +51,9 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/ops',
+    path: '/adminui/ops',
     component: Layout,
-    redirect: '/ops/service',
+    redirect: '/adminui/ops/service',
     meta: { title: 'Ops',icon: 'component',noCache: true},
     children: [{
       path: 'service',
@@ -85,7 +85,7 @@ export const asyncRouterMap = [
   ]
   },
   {
-    path: '/services',
+    path: '/adminui/services',
     name: 'services',
     component: Layout,
     meta: { title: 'Services', icon: 'table', noCache: true },
@@ -142,7 +142,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/users',
+    path: '/adminui/users',
     component: Layout,
     children: [{
       path: '',
@@ -152,7 +152,7 @@ export const asyncRouterMap = [
     }]
   },
   {
-    path: '/setting',
+    path: '/adminui/setting',
     component: Layout,
     children: [{
       path: '',
@@ -181,5 +181,5 @@ export const asyncRouterMap = [
   //     }
   //   ]
   // },
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '/adminui/*', redirect: '/404', hidden: true }
 ]

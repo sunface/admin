@@ -39,7 +39,7 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
       setTimeout(function() {
-        window.location.href = "/login"
+        window.location.href = "/adminui/login"
       },600)
       return Promise.reject(response.data.err_code )
     }

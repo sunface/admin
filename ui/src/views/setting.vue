@@ -136,7 +136,7 @@ export default {
         }) 
         // re-login
         this.$store.dispatch('LogOut').then(res => {
-          this.$router.push('/login')
+          this.$router.push('/adminui/login')
         }) 
       })
     }

@@ -69,7 +69,7 @@ export default {
           }
       }).then(response => {
           _this.$store.dispatch('SetUserInfo', response.data.data).then(() => {  
-              _this.$router.push({ path: '/' })
+              _this.$router.push({ path: '/adminui' })
           })
       }).catch(error => {
       })

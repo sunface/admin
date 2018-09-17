@@ -10,7 +10,6 @@ export default {
     icons: '图标',
     components: '组件',
     componentIndex: '介绍',
-    tinymce: '富文本编辑器',
     markdown: 'Markdown',
     jsonEditor: 'JSON编辑器',
     dndList: '列表拖拽',

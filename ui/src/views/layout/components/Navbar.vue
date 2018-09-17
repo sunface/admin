@@ -77,7 +77,7 @@ export default {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       }).catch(error => {
         // 登出错误，登陆数据已经清除，返回登陆页面
-        _this.$router.push('/login')
+        _this.$router.push('/adminui/login')
       })
     },
     env() {

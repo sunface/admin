@@ -17,7 +17,7 @@ function hasPermission(roles, permissionRoles) {
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
 
-const whiteList = ['/login']// no redirect whitelist
+const whiteList = ['/adminui/login']// no redirect whitelist
 
 router.beforeEach((to, _, next) => {
   NProgress.start() // start progress bar
@@ -25,8 +25,8 @@ router.beforeEach((to, _, next) => {
 
   if (getToken()) { // determine if there has token
     /* has token*/
-    if (to.path === '/login') {
-      next({ path: '/' })
+    if (to.path === '/adminui/login') {
+      next({ path: '/adminui' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.name == '') {
@@ -46,7 +46,7 @@ router.beforeEach((to, _, next) => {
             if (hasPermission(store.getters.roles, to.meta.roles)) {
               next()//
             } else {
-              next({ path: '/401', replace: true, query: { noGoBack: true }})
+              next({ path: '/adminui/401', replace: true, query: { noGoBack: true }})
             }
         }).catch(error => {
           // 发生错误，需要重新登陆
@@ -65,7 +65,7 @@ router.beforeEach((to, _, next) => {
         if (hasPermission(store.getters.roles, to.meta.roles)) {
           next()//
         } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
+          next({ path: '/adminui/401', replace: true, query: { noGoBack: true }})
         }
       }
      
@@ -76,7 +76,7 @@ router.beforeEach((to, _, next) => {
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       next()
     } else {
-      next('/login') // 否则全部重定向到登录页
+      next('/adminui/login') // 否则全部重定向到登录页
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     }
   }
