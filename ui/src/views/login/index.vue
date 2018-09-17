@@ -28,8 +28,8 @@
       <el-button type="primary" style="width:100%;margin-bottom:30px;"  @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
 
       <div class="tips">
-        <span>{{$t('login.username')}} : admin</span>
-        <span>{{$t('login.password')}} : admin</span>
+        <span>{{$t('login.username')}} : guest</span>
+        <span>{{$t('login.password')}} : guest</span>
       </div>
     </el-form>
 
