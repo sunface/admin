@@ -134,7 +134,8 @@ $light_gray:#eee;
     left: 50px;
     width: 460px;
     padding: 35px 35px 15px 35px;
-    margin-top: 150px
+    margin-top: 150px;
+    z-index: 99;
   }
   .tips {
     font-size: 13px;
@@ -201,5 +202,17 @@ $light_gray:#eee;
   position: absolute;
   bottom: 0;
   left: 0;
+  img {
+    z-index: 1
+  }
+}
+
+ @media only screen and (max-width: 800px) {
+     .login-form { 
+        margin-top: 30px !important;
+     }
+     .index-bg-footer {
+       display: none !important
+     }
 }
 </style>

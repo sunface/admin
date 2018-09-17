@@ -30,7 +30,9 @@ type Config struct {
 		ServerID int64
 		Token    string
 	}
-
+	Static struct {
+		Port string
+	}
 	Etcd struct {
 		Addrs []string
 	}

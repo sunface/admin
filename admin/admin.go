@@ -69,7 +69,7 @@ func (a *Admin) listen() {
 			fmt.Println(c.Request().Host)
 			return c.Redirect(http.StatusMovedPermanently, "/lab")
 		})
-		e.Logger.Fatal(e.Start(":80"))
+		e.Logger.Fatal(e.Start(":" + misc.Conf.Static.Port))
 	}()
 
 	e := echo.New()
