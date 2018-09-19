@@ -46,6 +46,10 @@ func (a *Admin) Shutdown() {
 func (a *Admin) listen() {
 	go func() {
 		e := echo.New()
+		e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+			Level: 5,
+		}))
+
 		e.Static("/images", "./images")
 
 		e.Static("/adminui", "./ui/dist")
@@ -68,7 +72,6 @@ func (a *Admin) listen() {
 		})
 
 		e.GET("/:any", func(c echo.Context) error {
-			fmt.Println(c.Request().Host)
 			return c.Redirect(http.StatusMovedPermanently, "/lab")
 		})
 		e.Logger.Fatal(e.Start(":" + misc.Conf.Static.Port))
