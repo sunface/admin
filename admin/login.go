@@ -52,6 +52,7 @@ func (a *Admin) login(c echo.Context) error {
 			Message: g.DatabaseE,
 		})
 	}
+	defer rows.Close()
 
 	if !rows.Next() {
 		return c.JSON(http.StatusOK, g.Result{

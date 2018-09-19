@@ -26,6 +26,7 @@ import Layout from '@/views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
+  {path: '/', redirect: '/adminui/dashboard'},
   { path: '/adminui/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/adminui/404', component: () => import('@/views/errorPage/404'), hidden: true },
   { path: '/adminui/401', component: () => import('@/views/errorPage/401'), hidden: true },

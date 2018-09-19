@@ -46,6 +46,8 @@ func (a *Admin) Shutdown() {
 func (a *Admin) listen() {
 	go func() {
 		e := echo.New()
+		e.Static("/images", "./images")
+
 		e.Static("/adminui", "./ui/dist")
 		e.Static("/lab", "../labsite/dist")
 
