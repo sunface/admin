@@ -1,73 +1,73 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-        <el-tag>service</el-tag>
-        <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="请选择Service">
+        <el-tag>{{$t('common.service')}}</el-tag>
+        <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  :placeholder="$t('common.selectService')">
             <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name"></el-option>
         </el-select>
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-plus">Add App</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-plus">{{$t('ops.addApp')}}</el-button>
     </div>
 
     <div class="table">
         <el-table  :data="apps" border fit highlight-current-row style="width: 100%;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
-            <el-table-column align="center" label="Name" width="250" prop="name" sortable>
+            <el-table-column align="center" :label="$t('common.name')" width="250" prop="name" sortable>
             <template slot-scope="scope">
                 <span>{{scope.row.name}}</span> 
             </template>
             </el-table-column>
-            <el-table-column width="200" align="center" label="Service" sortable>
+            <el-table-column width="200" align="center" :label="$t('common.service')" sortable>
                 <template slot-scope="scope">
                 <span>{{scope.row.service}}</span>
             </template>
             </el-table-column>
-            <el-table-column width="350" align="center" label="Description">
+            <el-table-column width="350" align="center" :label="$t('common.desc')">
             <template slot-scope="scope">
                 <span>{{scope.row.desc}}</span>
             </template>
             </el-table-column>
-            <el-table-column align="center" label="Operate" class-name="small-padding">
+            <el-table-column align="center" :label="$t('common.operate')" class-name="small-padding">
             <template slot-scope="scope">
-                <el-button size="mini" @click="handleEdit(scope.row)">Edit</el-button>
+                <el-button size="mini" @click="handleEdit(scope.row)">{{$t('common.edit')}}</el-button>
             </template>
             </el-table-column>
         </el-table>
     </div>
 
-     <el-dialog title="Create application" :visible.sync="createVisible">
+     <el-dialog :title="$t('ops.addApp')" :visible.sync="createVisible">
         <el-form  label-position="left" label-width="70px" style='width: 500px; margin-left:50px;'>
-          <el-form-item label="name" prop="name">
-            <el-input v-model="tempCreate.name" placeholder="only support alhpabet,once created,it cant be changed"></el-input>
+          <el-form-item :label="$t('common.name')" prop="name">
+            <el-input v-model="tempCreate.name" :placeholder="$t('ops.serviceNameTips')"></el-input>
           </el-form-item>
-          <el-form-item label="service">
+          <el-form-item :label="$t('common.service')">
             {{selectedService}}
           </el-form-item>
-          <el-form-item label="desc">
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="describe the app" v-model="tempCreate.desc">
+          <el-form-item :label="$t('common.desc')">
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" :placeholder="$t('common.descTips')" v-model="tempCreate.desc">
             </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="createVisible = false">Cancel</el-button>
-          <el-button  type="primary" @click="createSubmit">Submit</el-button>
+          <el-button @click="createVisible = false">{{$t('common.cancel')}}</el-button>
+          <el-button  type="primary" @click="createSubmit">{{$t('common.submit')}}</el-button>
         </div>
       </el-dialog>
 
-      <el-dialog title="Edit application" :visible.sync="editVisible">
+      <el-dialog :title="$t('ops.editApp')" :visible.sync="editVisible">
         <el-form  label-position="left" label-width="70px" style='width: 500px; margin-left:50px;'>
-          <el-form-item label="name" prop="name">
+          <el-form-item :label="$t('common.name')" prop="name">
             {{tempEdit.name}}
           </el-form-item>
-          <el-form-item label="service">
+          <el-form-item :label="$t('common.service')">
             {{tempEdit.service}}
           </el-form-item>
-          <el-form-item label="desc">
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="describe the app" v-model="tempEdit.desc">
+          <el-form-item :label="$t('common.desc')">
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" :placeholder="$t('common.descTips')" v-model="tempEdit.desc">
             </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="editVisible = false">Cancel</el-button>
-          <el-button  type="primary" @click="editSubmit">Submit</el-button>
+          <el-button @click="editVisible = false">{{$t('common.cancel')}}</el-button>
+          <el-button  type="primary" @click="editSubmit">{{$t('common.submit')}}</el-button>
         </div>
       </el-dialog>
   </div>
@@ -134,7 +134,7 @@ export default {
             this.createVisible = false
             this.loadApps()
             this.$message({
-                message: '创建成功',
+                message: 'create ok',
                 type: 'success',
                 duration: 3 * 1000,
                 center: true

@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        <el-tag> service</el-tag>
-        <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 160px"  placeholder="请选择Service">
+        <el-tag> {{$t('common.service')}}</el-tag>
+        <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 160px"  :placeholder="$t('common.selectService')">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>
         </el-select>
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-edit">Create API</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-edit">{{$t('juz.createApi')}}</el-button>
 
        
 
         <span style="float:right;margin-right:30px">
-          <el-button class="filter-item"  @click="batchRelease"  v-waves icon="el-icon-upload2">Batch Release</el-button>
-          <el-button class="filter-item" style="margin-right: 20px;" @click="handleBatchStrategy"  v-waves icon="el-icon-bell">Batch Strategy</el-button>
-          <el-input  style="width: 250px;" class="filter-item" placeholder="fuzzing search" v-model="q" clearable @clear="loadApis(1)" @keyup.enter.native="loadApis(1)" >
+          <el-button class="filter-item"  @click="batchRelease"  v-waves icon="el-icon-upload2">{{$t('juz.batchReleas')}}</el-button>
+          <el-button class="filter-item" style="margin-right: 20px;" @click="handleBatchStrategy"  v-waves icon="el-icon-bell">{{$t('juz.batchStrategy')}}</el-button>
+          <el-input  style="width: 250px;" class="filter-item" :placeholder="$t('common.fuzzingSearch')" v-model="q" clearable @clear="loadApis(1)" @keyup.enter.native="loadApis(1)" >
           </el-input>
           <el-button class="filter-item" type="text" v-waves icon="el-icon-search"   @click="loadApis(1)"></el-button>
         </span>
@@ -31,12 +31,12 @@
               <span>{{scope.row.api_id}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="left" label="application" width="160">
+          <el-table-column align="left" :label="$t('common.application')" width="160">
             <template slot-scope="scope">
               <span>{{scope.row.app}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="400" align="left" label="backend info" >
+          <el-table-column width="400" align="left" :label="$t('juz.backendInfo')" >
             <template slot-scope="scope">
               <span v-if="scope.row.backend_type==1">HTTP(S)-</span>
               <span v-else>Mock-</span>
@@ -46,19 +46,19 @@
               <span v-if="scope.row.addr_type==2">-{{scope.row.backend_uri}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="250" align="left" label="status" >
+          <el-table-column width="250" align="left" :label="$t('common.status')" >
              <template slot-scope="scope">
-                <div><el-tag type="success" size="mini" >edit</el-tag> <span style="color:#337ab7;font-size:13px;">{{scope.row.revise_version}}</span></div>
-                <div v-if="scope.row.release_version!=''" style="margin-top:3px"><el-tag  size="mini"   :type="calcRelease(scope.row)">release</el-tag>  <span style="color:#337ab7;font-size:13px;">{{scope.row.release_version}}</span></div>
-                <div v-else style="margin-top:3px"><el-tag type="warning" size="mini">not released</el-tag></div>
+                <div><el-tag type="success" size="mini" >{{$t('common.edit')}}</el-tag> <span style="color:#337ab7;font-size:13px;">{{scope.row.revise_version}}</span></div>
+                <div v-if="scope.row.release_version!=''" style="margin-top:3px"><el-tag  size="mini"   :type="calcRelease(scope.row)">{{$t('common.release')}}</el-tag>  <span style="color:#337ab7;font-size:13px;">{{scope.row.release_version}}</span></div>
+                <div v-else style="margin-top:3px"><el-tag type="warning" size="mini">{{$t('common.notReleased')}}</el-tag></div>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="operate" class-name="small-padding fixed-width">
+          <el-table-column align="center" :label="$t('common.operate')" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <span class="table-op-btn" v-if="scope.row.release_version!=scope.row.revise_version && scope.row.release_version!=''" @click="releaseAPI(scope.row)">release</span>
-              <span  class="table-op-btn" v-if="scope.row.release_version=='' " @click="releaseAPI(scope.row)">release</span>
-              <span  class="table-op-btn" @click="handleManage(scope.row)">manage</span>
-              <span   class="table-op-btn" @click="handleCopy(scope.row,$event)">copyConfig</span>
+              <span class="table-op-btn" v-if="scope.row.release_version!=scope.row.revise_version && scope.row.release_version!=''" @click="releaseAPI(scope.row)">{{$t('common.release')}}</span>
+              <span  class="table-op-btn" v-if="scope.row.release_version=='' " @click="releaseAPI(scope.row)">{{$t('common.release')}}</span>
+              <span  class="table-op-btn" @click="handleManage(scope.row)">{{$t('common.manage')}}</span>
+              <span   class="table-op-btn" @click="handleCopy(scope.row,$event)">{{$t('common.copyConfig')}}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -83,19 +83,19 @@
                 >
                 <el-menu-item index="1">
                    <i class="el-icon-setting"></i> 
-                  <span slot="title">API Define</span>
+                  <span slot="title">{{$t('juz.apiDefine')}}</span>
                 </el-menu-item>
                 <el-menu-item index="2">
                   <i class="el-icon-caret-right"></i>
-                  <span slot="title">API Test</span>
+                  <span slot="title">{{$t('juz.apiTest')}}</span>
                 </el-menu-item>
                 <el-menu-item index="3">
                    <i class="el-icon-menu"></i>
-                  <span slot="title">Audit Log</span>
+                  <span slot="title">{{$t('juz.auditLog')}}</span>
                 </el-menu-item>
                 <el-menu-item index="4">
                    <i class="el-icon-bell"></i>
-                  <span slot="title">Metrics</span>
+                  <span slot="title">{{$t('juz.metrics')}}</span>
                 </el-menu-item>
                 <!-- <el-menu-item index="5">
                    <i class="el-icon-document"></i>
@@ -108,12 +108,12 @@
                 <div v-show="selectManageIndex==1">
                      <div style="width:85%">
                         <span style="float:right;margin-top:-36px">
-                          <el-button type="success" size="small" @click="handleEdit()">Edit</el-button>
-                          <el-button v-if="tempApi.release_version!=tempApi.revise_version && tempApi.release_version!=''" type="warning" size="small" @click="releaseAPI(tempApi)">Release</el-button>
-                          <el-button v-if="tempApi.release_version=='' " type="warning" size="small" @click="releaseAPI(tempApi)">Release</el-button>
+                          <el-button type="success" size="small" @click="handleEdit()">{{$t('common.edit')}}</el-button>
+                          <el-button v-if="tempApi.release_version!=tempApi.revise_version && tempApi.release_version!=''" type="warning" size="small" @click="releaseAPI(tempApi)">{{$t('common.release')}}</el-button>
+                          <el-button v-if="tempApi.release_version=='' " type="warning" size="small" @click="releaseAPI(tempApi)">{{$t('common.release')}}</el-button>
                          
-                          <el-button v-show="tempApi.release_version!=''" type="info" size="small" @click="offlineAPI(tempApi)">Offline</el-button>
-                           <el-button  type="" @click="delApi(tempApi)" size="small">Delete</el-button>
+                          <el-button v-show="tempApi.release_version!=''" type="info" size="small" @click="offlineAPI(tempApi)">{{$t('common.offline')}}</el-button>
+                           <el-button  type="" @click="delApi(tempApi)" size="small">{{$t('common.delete')}}</el-button>
                         </span>
                         <apiDefine :api="tempApi" formType='black-form'></apiDefine>
                     </div>
@@ -139,20 +139,20 @@
 
       <el-dialog  class="mf-dialog" :title="apiTitle" :visible.sync="apiDefineVisible" top="40px" :before-close="cancelAPIDefine" :fullscreen=false> 
         <el-steps :active="apiDefineStep" finish-status="success">
-          <el-step title="Basic"></el-step>
-          <el-step title="Request"></el-step>
-          <el-step title="Advanced"></el-step>
+          <el-step :title="$t('juz.basic')"></el-step>
+          <el-step :title="$t('juz.request')"></el-step>
+          <el-step :title="$t('juz.advance')"></el-step>
         </el-steps>
 
         <el-row :gutter="20" style="margin-top:40px;">
             <el-col :span=20 :offset=2>
               <div v-show="apiDefineStep==0">
                   <el-form label-position="left" label-width="110px" size="small">
-                    <el-form-item label="Service">
+                    <el-form-item :label="$t('common.service')">
                       {{tempApi.service}}
                     </el-form-item>
-                    <el-form-item label="Application" required>
-                      <el-select clearable class="filter-item" v-model="tempApi.app" style="width: 200px"  placeholder="please choose">
+                    <el-form-item :label="$t('common.application')" required>
+                      <el-select clearable class="filter-item" v-model="tempApi.app" style="width: 200px"  :placeholder="$t('common.select')">
                             <el-option v-for="s in  apps" :key="s.name" :label="s.name" :value="s.name">
                             </el-option>
                           </el-select>
@@ -168,13 +168,13 @@
                         <el-alert
                         :closable=false
                         v-if="tempApi.path_type==1"
-                        title="Client request with http://JUZ_IP/a/b/c"
+                        :title="$t('juz.urlType1Tips')"
                         type="success">
                       </el-alert> 
                        <el-alert
                         :closable=false
                         v-else
-                        title="Client request with  http://JUZ_IP/service/api?api_name=abc&api_version=1"
+                         :title="$t('juz.urlType2Tips')"
                         type="success">
                       </el-alert> 
                     </el-form-item>
@@ -188,21 +188,21 @@
                         type="warning">
                       </el-alert>
                     </el-form-item>
-                    <el-form-item v-if="defineStatus=='create'" label="API Name"  class="first-item" required>
+                    <el-form-item v-if="defineStatus=='create'" :label="$t('juz.apiName')"  class="first-item" required>
                       <span v-if="tempApi.path_type==0">{{tempApi.service}}.</span>
                       <el-tooltip class="no-border-input" :content="apiNameTooltip()" placement="top">
                           <el-input  v-model="tempApi.api_id" placeholder=""  style="width:250px">
                           </el-input>
                        </el-tooltip>
                     </el-form-item>
-                    <el-form-item v-else label="API Name" class="first-item" required>
+                    <el-form-item v-else :label="$t('juz.apiName')" class="first-item" required>
                       {{showName(tempApi.api_id)}}
                     </el-form-item>
-                    <el-form-item label="Version">
+                    <el-form-item :label="$t('common.version')">
                       <el-input-number v-if="defineStatus=='create'" class="no-border-input" style="width:90px;border:none" v-model="tempApi.version"  :min="1" :max="9" size="mini"></el-input-number>
                       <span v-else>{{showVersion(tempApi.api_id)}}</span>
                     </el-form-item>
-                    <el-form-item label="Desc">
+                    <el-form-item :label="$t('common.desc')">
                       <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8}" placeholder="Describe your api" v-model="tempApi.desc">
                       </el-input>
                     </el-form-item>
@@ -210,13 +210,13 @@
               </div>
               <div v-show="apiDefineStep==1">
                   <el-form label-position="left" label-width="150px" size="small">
-                    <el-form-item label="Route Type" prop="route_type">
+                    <el-form-item :label="$t('juz.routeType')" prop="route_type">
                       <el-select  class="filter-item" v-model="tempApi.route_type" style="width: 150px"  placeholder="please choose">
-                        <el-option label="Direct" :value=1></el-option>
-                        <el-option  label="Redirect" :value=2></el-option>
+                        <el-option :label="$t('juz.routeDirect')" :value=1></el-option>
+                        <el-option   :label="$t('juz.routeRedirect')" :value=2></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="Backend Type" prop="name" class="first-item">
+                    <el-form-item :label="$t('juz.backendType')" prop="name" class="first-item">
                       <el-radio-group v-model="tempApi.backend_type">
                         <el-radio :label="1">HTTP(s)</el-radio>
                         <el-radio :label="2">Mock</el-radio>
@@ -231,21 +231,21 @@
                             <el-option  label="DELETE" value="DELETE"></el-option>
                           </el-select>
                       </el-form-item>
-                       <el-form-item label="Addr Type" prop="name" class="first-item">
+                       <el-form-item :label="$t('juz.addrType')" prop="name" class="first-item">
                         <el-radio-group v-model="tempApi.addr_type">
                           <el-radio :label="1">URL</el-radio>
                           <el-radio :label="2">ETCD</el-radio>
                         </el-radio-group> 
                       </el-form-item>
                       <div v-if="tempApi.addr_type==1">
-                        <el-form-item label="Backend Addr" required>
+                        <el-form-item :label="$t('juz.backendAddr')" required>
                           <el-tooltip content="The application url you want to access" placement="top">
                               <el-input v-model="tempApi.backend_addr" placeholder="http://"></el-input>
                           </el-tooltip>
                         </el-form-item>
                       </div>
                       <div v-else>
-                        <el-form-item label="Backend Addr" required>
+                        <el-form-item :label="$t('juz.backendAddr')" required>
                           <el-select clearable class="filter-item" v-model="tempService" @change='handleTempService' style="width: 160px"  placeholder="select service">
                             <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
                             </el-option>
@@ -255,7 +255,7 @@
                             </el-option>
                           </el-select>
                         </el-form-item>
-                        <el-form-item label="Backend URI" required>
+                        <el-form-item :label="$t('juz.backendURI')" required>
                           <el-tooltip content="Http uri,e.g. if target is 'http://test.com/a/b',here you shold fill in '/a/b'" placement="top">
                               <el-input v-model="tempApi.backend_uri" placeholder="/a/b"></el-input>
                           </el-tooltip>
@@ -263,10 +263,10 @@
                       </div>
                     
                       <el-form-item label="Header,Cookie">
-                          <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
+                          <el-tag type="success" size="large" style="border:none;">{{$t('juz.passThrough')}}</el-tag>
                       </el-form-item>
                        <el-form-item label="Params">
-                          <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
+                          <el-tag type="success" size="large" style="border:none;">{{$t('juz.passThrough')}}</el-tag>
                       </el-form-item>
                     </div>
                     <div v-else>
@@ -286,7 +286,7 @@
               <div v-show="apiDefineStep==2">
                   <el-form label-position="left" label-width="150px" size="small">
                       <div class="form-block">
-                        <span>Param Verify<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <span>{{$t('juz.paramVerify')}}<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
                         <el-form-item label="On/Off" style="width:300px" class="first-item">
                             <el-switch
                               v-model="tempApi.verify_on"
@@ -295,13 +295,13 @@
                               :inactive-value='switchInactive'>
                             </el-switch>
                         </el-form-item>
-                        <el-form-item label="Verify Table" style="width:300px" class="first-item">
-                          <el-button type="success" icon="el-icon-edit"  @click="showVerify">Edit</el-button>
+                        <el-form-item :label="$t('juz.verifyTable')" style="width:300px" class="first-item">
+                          <el-button type="success" icon="el-icon-edit"  @click="showVerify">{{$t('common.edit')}}</el-button>
                         </el-form-item>
                       </div>
 
                       <div class="form-block">
-                        <span>Canary Test<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <span>{{$t('juz.canaryTest')}}<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
                         <el-form-item label="On/Off" style="width:300px" class="first-item">
                             <el-switch
                               v-model="tempApi.traffic_on"
@@ -310,20 +310,20 @@
                               :inactive-value='switchInactive'>
                             </el-switch>
                         </el-form-item>
-                        <el-form-item label="Target APIID" style="width:500px" class="first-item">
-                          <el-tooltip content="Some traffic will route to this api id" placement="top">
+                        <el-form-item :label="$t('juz.targetAPIID')" style="width:500px" class="first-item">
+                          <el-tooltip :content="$t('juz.targetIDTips')" placement="top">
                             <el-input v-model="tempApi.traffic_api" placeholder="">
                             </el-input>
                           </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="Traffic Ratio" prop="req_timeout">
-                          <el-tooltip content="e.g. 10 means 10% traffic will route to the api id above" placement="top">
+                        <el-form-item :label="$t('juz.trafficRatio')" prop="req_timeout">
+                          <el-tooltip :content="$t('juz.trafficRatioTips')" placement="top">
                               <el-input-number v-model="tempApi.traffic_ratio" :min="1" :max="100"></el-input-number>
                           </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="IP List" style="width:400px" class="first-item">
-                          <el-tooltip content="Controls which ip will be routed,if not control,routed will be randomly" placement="top">
-                            <el-input v-model="tempApi.traffic_ips" placeholder="Separate ips with Spaces">
+                        <el-form-item :label="$t('juz.ipList')" style="width:400px" class="first-item">
+                          <el-tooltip :content="$t('juz.ipListTips')" placement="top">
+                            <el-input v-model="tempApi.traffic_ips" :placeholder="$t('juz.sepIpWithSpace')">
                             </el-input>
                           </el-tooltip>
                         </el-form-item>
@@ -331,17 +331,17 @@
 
                        <el-alert
                         style="margin-top:8px"
-                            title="Tips: you need to create strategy in strategy page first"
+                            :title="$t('juz.createStrategyTips')"
                             :closable=false
                             type="success">
                           </el-alert>
                       <div class="form-block">
-                        <span>White/Black List<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
-                        <el-form-item label="Strategy" prop="req_timeout" class="first-item">
+                        <span>{{$t('juz.bwList')}}<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item :label="$t('juz.strategy')" prop="req_timeout" class="first-item">
                           <el-select clearable class="filter-item" v-model="selBW" @change="selectBW" style="width: 200px"  placeholder="please choose">
                             <el-option v-for="s in  filterStrategies(1)" :key="s.name" :label="s.name" :value="s.id">
                             </el-option>
-                          </el-select>
+                          </el-select> 
                           <el-popover
                             v-show="this.selBW != ''"
                             placement="top"
@@ -353,8 +353,8 @@
                         </el-form-item>
                       </div>
                       <div class="form-block">
-                        <span>Timeout/Retry<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
-                        <el-form-item label="Strategy" prop="req_timeout" class="first-item">
+                        <span>{{$t('juz.timoutRetry')}}<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item :label="$t('juz.strategy')" prop="req_timeout" class="first-item">
                           <el-select clearable class="filter-item" v-model="selRetry" @change="selectRetry" style="width: 200px"  placeholder="please choose">
                             <el-option v-for="s in  filterStrategies(2)" :key="s.name" :label="s.name" :value="s.id"> 
                             </el-option>
@@ -370,8 +370,8 @@
                         </el-form-item>
                       </div>
                       <div class="form-block">
-                        <span>Traffic Control<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
-                        <el-form-item label="Strategy" prop="req_timeout" class="first-item">
+                        <span>{{$t('juz.trafficControl')}}<el-tag type="success" size="mini" style="border:none;">optional</el-tag></span>
+                        <el-form-item :label="$t('juz.strategy')" prop="req_timeout" class="first-item">
                           <el-select clearable class="filter-item" v-model="selTraffic" @change="selectTraffic" style="width: 200px"  placeholder="please choose">
                             <el-option v-for="s in  filterStrategies(3)" :key="s.name" :label="s.name" :value="s.id"> 
                             </el-option>
@@ -401,7 +401,7 @@
 
       <el-dialog
         class="mf-dialog" 
-        title="Param Verify"
+        :title="$t('juz.paramVerify')"
         :fullscreen=true
         :visible.sync="veryfyVisible"
       >
@@ -410,44 +410,44 @@
                 <div v-html="ruleContent" ></div>
             </el-col>
             <el-col :span=16 :offset=1>
-                <el-form label-position="left" label-width="70px">
+                <el-form label-position="left" label-width="120px">
                   <div>
-                    <span>Create rule for  <strong>{{tempApi.api_id}}</strong> </span>
-                    <el-form-item label="Param" style="margin-top:15px">
+                    <span>{{$t('juz.createRule')}}</span>
+                    <el-form-item :label="$t('common.param')" style="margin-top:15px">
                       <el-input v-model="tempVerifyRule.param" placeholder="Param name" style="width:150px" >
                       </el-input>
                     </el-form-item>
-                    <el-form-item label="Rule">
+                    <el-form-item :label="$t('common.rule')">
                       <el-input v-model="tempVerifyRule.rule" placeholder="regexp format" style="width:350px">
                       </el-input>
                     </el-form-item>
-                    <el-form-item label="Test data">
+                    <el-form-item :label="$t('juz.testData')">
                       <el-input v-model="tempVerifyRule.test_data" placeholder="input test data for test the rule" style="width:150px">
                       </el-input>
                     </el-form-item>
-                     <el-button @click="addVerifyRule" type="success" >Test and Create</el-button>
+                     <el-button @click="addVerifyRule" type="success" >{{$t('juz.testCreate')}}</el-button>
                   </div>
               
                 </el-form>
 
                 <div class="table" style="margin-top:15px;overflow-y:auto">
                   <el-table  :data="tempApi.param_rules" border fit highlight-current-row style="width: 100%;">
-                    <el-table-column align="center" label="Param" width="150">
+                    <el-table-column align="center" :label="$t('common.param')" width="150">
                       <template slot-scope="scope">
                         <span>{{scope.row.param}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column width="400" align="center" label="Rule">
+                    <el-table-column width="400" align="center" :label="$t('common.rule')">
                       <template slot-scope="scope">
                         <span>{{scope.row.rule}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column width="250" align="center" label="Test Data" >
+                    <el-table-column width="250" align="center" :label="$t('juz.testData')" >
                       <template slot-scope="scope">
                           <span>{{scope.row.test_data}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column align="center" label="Operate" class-name="small-padding fixed-width">
+                    <el-table-column align="center" :label="$t('common.operate')" class-name="small-padding fixed-width">
                       <template slot-scope="scope"> 
                         <el-button  type="text" size="mini" icon="el-icon-minus" circle @click="delParamRule(scope.row.param)"></el-button>
                       </template>
@@ -675,16 +675,16 @@ export default {
     },
     apiNameAlert() {
       if (this.tempApi.path_type==0) {
-         return "API ID is auto generated with this rule: Service + API Name + 'v' + Version, e.g. test.get.v1"
+         return this.$t('juz.apiIDTips1')
       } else {
-        return "API ID is auto generated with this rule: API Name + 'v' + VersionAPI ID,e.g. /a/b/c.v1"
+        return this.$t('juz.apiIDTips2')
       }
     },
     apiNameTooltip() {
       if (this.tempApi.path_type==0) {
-         return "The api name must be the form of a.b, sperated with '.', only allow alphabet and numberic"
+         return this.$t('juz.apiNameTips1')
       } else {
-        return "The api name must be the form of /a/b,only allow alphabet and numberic"
+        return  this.$t('juz.apiNameTips2')
       }
     },
     showName(apiID) {

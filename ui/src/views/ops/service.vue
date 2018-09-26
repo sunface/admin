@@ -4,64 +4,64 @@
         <!-- <el-input  style="width: 200px;" class="filter-item" placeholder="Service">
         </el-input>
         <el-button class="filter-item" type="primary" style="margin-left: 10px;" v-waves icon="el-icon-search" @click="handleCreate">搜索</el-button> -->
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-plus">Add Service</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"  v-waves type="success" icon="el-icon-plus">{{$t('ops.addService')}}</el-button>
         <!-- <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">导出</el-button> -->
       </div>
 
       <div class="table">
         <el-table  :data="services" border fit highlight-current-row style="width: 100%"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
-          <el-table-column align="center" label="Name" width="250" prop="name" sortable>
+          <el-table-column align="center" :label="$t('common.name')" width="250" prop="name" sortable>
             <template slot-scope="scope">
               <span>{{scope.row.name}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="200" align="center" label="Owner" sortable>
+          <el-table-column width="200" align="center" :label="$t('common.owner')" sortable>
              <template slot-scope="scope">
               <span>{{scope.row.owner}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="350" align="center" label="Description">
+          <el-table-column width="350" align="center" :label="$t('common.desc')">
             <template slot-scope="scope">
               <span>{{scope.row.desc}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="Operate" class-name="small-padding">
+          <el-table-column align="center" :label="$t('common.operate')" class-name="small-padding">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.row)">Edit</el-button>
+              <el-button size="mini" @click="handleEdit(scope.row)">{{$t('common.edit')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
 
 
-      <el-dialog title="Create service" :visible.sync="createServiceVisible">
+      <el-dialog :title="$t('ops.addService')" :visible.sync="createServiceVisible">
         <el-form :model="tempCreate" label-position="left" label-width="70px" style='width: 500px; margin-left:50px;'>
-          <el-form-item label="name" prop="name">
-            <el-input v-model="tempCreate.name" placeholder="only support alhpabet,once created,it cant be changed"></el-input>
+          <el-form-item :label="$t('common.name')" prop="name">
+            <el-input v-model="tempCreate.name" :placeholder="$t('ops.serviceNameTips')"></el-input>
           </el-form-item>
-          <el-form-item label="owner" style="margin-top:25px">
-            <el-select class="filter-item" v-model="tempCreate.owner" style="width: 200px"  placeholder="select user" filterable>
+          <el-form-item :label="$t('common.owner')" style="margin-top:25px">
+            <el-select class="filter-item" v-model="tempCreate.owner" style="width: 200px"  :placeholder="$t('common.selectUser')" filterable>
                 <el-option v-for="u in users" :key="u.id" :label="u.username" :value="u.username"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="desc">
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="describe the service" v-model="tempCreate.desc">
+          <el-form-item :label="$t('common.desc')">
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" :placeholder="$t('common.descTips')" v-model="tempCreate.desc">
             </el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="createServiceVisible = false">Cancel</el-button>
-          <el-button  type="primary" @click="createSubmit">Submit</el-button>
+          <el-button @click="createServiceVisible = false">{{$t('common.cancel')}}</el-button>
+          <el-button  type="primary" @click="createSubmit">{{$t('common.submit')}}</el-button>
         </div>
       </el-dialog>
 
-       <el-dialog title="Edit Service" :visible.sync="editServiceVisible">
+       <el-dialog :title="$t('ops.editService')" :visible.sync="editServiceVisible">
         <el-form :model="tempEdit" label-position="left" label-width="120px" style='width: 550px; margin-left:50px;'>
-          <el-form-item label="Name" prop="name">
+          <el-form-item :label="$t('common.name')" prop="name">
               {{tempEdit.name}}
           </el-form-item>
-          <el-form-item label="desc">
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="describe the service" v-model="tempEdit.desc">
+          <el-form-item :label="$t('common.desc')">
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" :placeholder="$t('common.descTips')" v-model="tempEdit.desc">
             </el-input>
           </el-form-item>
           <!-- <el-form-item label="描述">
@@ -69,11 +69,11 @@
             </el-input>
           </el-form-item> -->
 
-          <el-form-item label="set user priv">
-            <el-select class="filter-item" v-model="editServiceUser" style="width: 150px"  placeholder="select user" filterable>
+          <el-form-item label="$t('common.setPriv')">
+            <el-select class="filter-item" v-model="editServiceUser" style="width: 150px"  :placeholder="$t('common.selectUser')" filterable>
                 <el-option v-for="u in users" :key="u.id" :label="u.username" :value="u.username"></el-option>
             </el-select>
-             <el-select class="filter-item" v-model="editServicePriv" style="width: 120px"  placeholder="select priv">
+             <el-select class="filter-item" v-model="editServicePriv" style="width: 120px"  :placeholder="$t('common.selectPriv')">
               <el-option label="normal" value="normal"></el-option>
               <el-option label="admin" value="admin"></el-option>
             </el-select>
@@ -85,14 +85,14 @@
           </el-form-item>
           
           <div class="form-block">
-             <el-tag type="warning" style="border:none">危险区域</el-tag>
-             <el-form-item label="change owner" class="margin-top-20">
-                <el-select class="filter-item" v-model="tempEdit.owner" style="width: 150px"  placeholder="select user" filterable>
+             <el-tag type="warning" style="border:none">{{$t('common.dangerZone')}}</el-tag>
+             <el-form-item :label="$t('ops.changeOwner')" class="margin-top-20">
+                <el-select class="filter-item" v-model="tempEdit.owner" style="width: 150px"  :placeholder="$t('common.selectUser')" filterable>
                     <el-option v-for="u in users" :key="u.id" :label="u.username" :value="u.username"></el-option>
                 </el-select>
                  <el-alert
                     :closable=false
-                    title="Once the owner is changed to others, you will loose the control of this service"
+                    :title="$t('ops.changeOwnerTips')"
                     type="warning">
                 </el-alert> 
             </el-form-item>
@@ -100,8 +100,8 @@
 
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="editServiceVisible = false">Cancel</el-button>
-          <el-button  type="primary" @click="editSubmit">Submit</el-button>
+          <el-button @click="editServiceVisible = false">{{$t('common.cancel')}}</el-button>
+          <el-button  type="primary" @click="editSubmit">{{$t('common.submit')}}</el-button>
         </div>
       </el-dialog>
   </div>

@@ -26,6 +26,9 @@ export default {
         type: 'success'
       })
     }
+  },
+  created() {
+    this.$i18n.locale = this.$store.getters.language
   }
 }
 </script>

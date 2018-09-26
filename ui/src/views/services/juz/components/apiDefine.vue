@@ -3,62 +3,62 @@
     <div>
         <el-alert
         :closable="false"
-        title="Basic"
+        :title="$t('juz.basic')"
         type="warning">
         </el-alert>
     </div>
     <el-form  :class="{'black-form':isBlackForm()}" label-position="left" label-width="150px" size="small">
-        <el-form-item label="Service" class="first-item">
+        <el-form-item :label="$t('common.service')" class="first-item">
             {{api.service}}
         </el-form-item>
-        <el-form-item label="App" class="first-item">
+        <el-form-item :label="$t('common.application')"  class="first-item">
             {{api.app}}
         </el-form-item>
         <el-form-item label="API ID"  class="first-item">
             {{api.api_id}}
         </el-form-item>
-        <el-form-item label="API Name"  class="first-item">
+        <el-form-item :label="$t('juz.apiName')"  class="first-item">
             {{showName(api.api_id)}}
         </el-form-item>
-        <el-form-item label="Version" class="first-item">
+        <el-form-item :label="$t('common.version')" class="first-item">
             {{showVersion(api.api_id)}}
         </el-form-item>
-        <el-form-item label="Desc">
+        <el-form-item :label="$t('common.desc')">
             {{api.desc}}
         </el-form-item>
-        <el-form-item label="Status">
-            <div><el-tag type="success">editVer</el-tag> <span style="font-size:13px;">{{api.revise_version}}</span></div>
-            <div v-if="api.release_version!=''" style="margin-top:3px"><el-tag :type="calcRelease(api)">releaseVer</el-tag>  <span style="font-size:13px;">{{api.release_version}}</span></div>
-            <div v-else style="margin-top:3px"><el-tag type="warning">not released</el-tag></div>
+        <el-form-item :label="$t('common.status')">
+            <div><el-tag type="success">{{$t('common.edit')}}</el-tag> <span style="font-size:13px;">{{api.revise_version}}</span></div>
+            <div v-if="api.release_version!=''" style="margin-top:3px"><el-tag :type="calcRelease(api)">{{$t('common.release')}}</el-tag>  <span style="font-size:13px;">{{api.release_version}}</span></div>
+            <div v-else style="margin-top:3px"><el-tag type="warning">{{$t('common.notReleased')}}</el-tag></div>
         </el-form-item>
     </el-form>
     <div>
         <el-alert
         :closable="false"
-        title="Request"
+        :title="$t('juz.request')"
         type="success">
         </el-alert>
     </div>
     <el-form   :class="{'black-form':isBlackForm()}" label-position="left" label-width="150px" size="small">
-        <el-form-item label="Backend Type" class="first-item">
+        <el-form-item :label="$t('juz.backendType')" class="first-item">
         <span v-if="api.backend_type==1">HTTP(s)</span>
         <span v-if="api.backend_type==2">Mock</span>
         </el-form-item>
         <div v-if="api.backend_type==1">
-            <el-form-item label="Addr Type">
+            <el-form-item :label="$t('juz.addrType')" >
                 <span v-if="api.addr_type==1">URL</span>
                 <span v-else>ETCD</span>
             </el-form-item>
-            <el-form-item label="Backend Addr">
+            <el-form-item :label="$t('juz.backendAddr')">
                 {{api.backend_addr}}
             </el-form-item>
-            <el-form-item label="Backend Uri" v-if="api.addr_type==2">
+            <el-form-item :label="$t('juz.backendURI')" v-if="api.addr_type==2">
                 {{api.backend_uri}}
             </el-form-item>
             <el-form-item label="Header,Cookie">
                 <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
             </el-form-item>
-            <el-form-item label="Params">
+            <el-form-item :label="$t('juz.params')">
                 <el-tag type="success" size="large" style="border:none;">Pass through</el-tag>
             </el-form-item>
             </div>
@@ -71,18 +71,18 @@
     <div>
     <el-alert
         :closable="false"
-        title="Advance"
+        :title="$t('juz.advance')"
         type="info">
         </el-alert>
     </div>
     <el-form   :class="{'black-form':isBlackForm()}" label-position="left" label-width="150px" size="small">
         <div class="form-block" style="margin-top:10px">
-            <span>Param Verify</span>
-            <el-form-item label="Status" style="width:300px" class="first-item">
+            <span>{{$t('juz.paramVerify')}}</span>
+            <el-form-item :label="$t('common.status')" style="width:300px" class="first-item">
                 <span v-if="api.verify_on==1">On</span>
                 <span v-else>Off</span>
             </el-form-item>
-            <el-form-item label="Verify Table" style="width:300px" class="first-item">
+            <el-form-item :label="$t('juz.verifyTable')" style="width:300px" class="first-item">
                 <el-popover
                     placement="top"
                     width="800"
@@ -93,24 +93,24 @@
             </el-form-item>
         </div>
         <div class="form-block">
-            <span>Canary Test</span>
-            <el-form-item label="Status" style="width:300px" class="first-item">
+            <span>{{$t('juz.canaryTest')}}</span>
+            <el-form-item :label="$t('common.status')" style="width:300px" class="first-item">
                 <span v-if="api.traffic_on==1">On</span>
                 <span v-else>Off</span>
             </el-form-item>
-            <el-form-item label="Target APIID" prop="req_timeout" style="width:500px" class="first-item">
+            <el-form-item :label="$t('juz.targetAPIID')" prop="req_timeout" style="width:500px" class="first-item">
                 {{api.traffic_api}}
             </el-form-item>
-            <el-form-item label="Traffic Ratio" prop="req_timeout">
+            <el-form-item :label="$t('juz.trafficRatio')" prop="req_timeout">
                 {{api.traffic_ratio}}
             </el-form-item>
-            <el-form-item label="IP List" style="width:300px" class="first-item">
+            <el-form-item :label="$t('juz.ipList')" style="width:300px" class="first-item">
                 {{api.traffic_ips}}
             </el-form-item>
         </div>
 
         <div class="form-block">
-            <span>White/Black List</span>
+            <span>{{$t('juz.bwList')}}</span>
             <el-form-item v-if="api.bw_strategy!=0" label="Strategy"  class="first-item">
                 {{api.bw_strategy}} 
                 <el-popover
@@ -122,11 +122,11 @@
                 </el-popover>
                 
             </el-form-item>
-             <el-form-item v-else label="no strategy"  class="first-item">
+             <el-form-item v-else :label="$t('juz.noStrategy')"  class="first-item">
             </el-form-item>
         </div>
         <div class="form-block">
-            <span>Timeout/Retry</span>
+            <span>{{$t('juz.timoutRetry')}}</span>
             <el-form-item v-if="api.retry_strategy!=0" label="Strategy"  class="first-item">
                 {{api.retry_strategy}}
                 <el-popover
@@ -137,11 +137,11 @@
                     <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px " @click="getStrategy(api.retry_strategy)"></i> 
                 </el-popover>
             </el-form-item>
-            <el-form-item v-else label="no strategy"  class="first-item">
+            <el-form-item v-else :label="$t('juz.noStrategy')"  class="first-item">
             </el-form-item>
         </div>
         <div class="form-block">
-            <span>Traffic Control</span>
+            <span>{{$t('juz.trafficControl')}}</span>
             <el-form-item v-if="api.traffic_strategy!=0" label="Strategy"  class="first-item">
                 {{api.traffic_strategy}}
                 <el-popover
@@ -152,7 +152,7 @@
                     <i slot="reference" class="el-icon-view hover-cursor icon-primary" style="margin-left: 8px" @click="getStrategy(api.traffic_strategy)"></i> 
                 </el-popover>
             </el-form-item>
-            <el-form-item v-else label="no strategy"  class="first-item">
+            <el-form-item v-else :label="$t('juz.noStrategy')"  class="first-item">
             </el-form-item>
         </div>
     </el-form>

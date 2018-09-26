@@ -1,30 +1,30 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="success" icon="el-icon-edit">Add User</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="success" icon="el-icon-edit">{{$t('ops.addUser')}}</el-button>
     </div>
 
     <div class="table">
       <el-table  :data="users" border fit highlight-current-row style="width: 100%"  :default-sort = "{prop: 'create_date', order: 'ascending'}">
-        <el-table-column align="center" label="user name" width="250" prop="name" sortable>
+        <el-table-column align="center" :label="$t('ops.userName')" width="250" prop="name" sortable>
           <template slot-scope="scope">
             <span>{{scope.row.username}}</span>
           </template>
         </el-table-column>
-        <el-table-column width="250" align="center" label="privilege" prop="creator" sortable>
+        <el-table-column width="250" align="center" :label="$t('common.privilege')" prop="creator" sortable>
             <template slot-scope="scope">
             <span>{{scope.row.priv}}</span>
           </template>
         </el-table-column>
-        <el-table-column width="250" align="center" label="create date" prop="admins">
+        <el-table-column width="250" align="center" :label="$t('common.createDate')" prop="admins">
           <template slot-scope="scope">
             <span>{{scope.row.create_date}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="操作" class-name="small-padding">
+        <el-table-column align="center" :label="$t('common.operate')" class-name="small-padding">
           <template slot-scope="scope">
-            <el-button  size="mini" @click="editUser(scope.row)" v-if="scope.row.username!='admin'">Edit</el-button>
-            <el-button  size="mini" type="danger" @click="deleteUser(scope.row.username)" v-if="scope.row.username!='admin'">Delete</el-button>
+            <el-button  size="mini" @click="editUser(scope.row)" v-if="scope.row.username!='admin'">{{$t('common.edit')}}</el-button>
+            <el-button  size="mini" type="danger" @click="deleteUser(scope.row.username)" v-if="scope.row.username!='admin'">{{$t('common.delete')}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -33,12 +33,12 @@
 
     <el-dialog  class="mf-dialog"  title="Add User" :visible.sync="createVisible">
         <el-form  label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
-          <el-form-item label="user name">
-            <el-input v-model="tempCreate.username" placeholder="only support alphabet and numeric"></el-input>
+          <el-form-item :label="$t('ops.userName')">
+            <el-input v-model="tempCreate.username" :placeholder="$t('common.onlyNumAndAlpha')"></el-input>
           </el-form-item>
 
-          <el-form-item label="privilege">
-            <el-select class="filter-item" v-model="tempCreate.priv" style="width: 200px"  placeholder="select priv">
+          <el-form-item :label="$t('common.privilege')">
+            <el-select class="filter-item" v-model="tempCreate.priv" style="width: 200px"  :placeholder="$t('common.selectPriv')">
               <el-option label="normal" value="normal"></el-option>
               <el-option label="admin" value="admin"></el-option>
             </el-select>
@@ -51,8 +51,8 @@
         </el-form>
        
         <div slot="footer" class="dialog-footer">
-          <el-button @click="createVisible = false">Cancel</el-button>
-          <el-button  type="primary" @click="createSubmit">Submit</el-button>
+          <el-button @click="createVisible = false">{{$t('common.cancel')}}</el-button>
+          <el-button  type="primary" @click="createSubmit">{{$t('common.submit')}}</el-button>
         </div>
       </el-dialog>
     

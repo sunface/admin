@@ -9,7 +9,7 @@
         <el-row style="margin-top:10px;">
             <el-col :span=12>
                 <el-alert
-                    title="Tips: copy the config first ,then paste below to import"
+                    :title="$t('juz.copyConfigTips')"
                     :closable=false
                     type="warning">
                 </el-alert>

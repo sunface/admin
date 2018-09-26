@@ -4,7 +4,7 @@
         <el-form-item label="API ID"  >
             {{api.api_id}}
         </el-form-item>    
-        <el-form-item label="Backend Info"  >
+        <el-form-item :label="$t('juz.backendInfo')"  >
             <span v-if="api.backend_type==1">HTTP(S)-</span>
             <span v-else>Mock-</span>
             <span v-if="api.addr_type==1">URL-</span>
@@ -12,7 +12,7 @@
             {{api.backend_addr}}
             <span v-if="api.addr_type==2">-{{api.backend_uri}}</span>
         </el-form-item>
-        <el-form-item label="Debug Mode">
+        <el-form-item :label="$t('juz.mode')">
             <el-radio-group v-model="debugOn" @change="handleDebug">
                 <el-radio :label=true style="color:white">ON</el-radio>
                 <el-radio :label=false style="color:white">OFF</el-radio>
@@ -24,18 +24,18 @@
         </el-form-item> -->
 
 
-        <el-form-item label="Params" style="width:600px">
+        <el-form-item :label="$t('common.param')" style="width:600px">
             <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 12}" :value="makeParam(testParams)" @change="paramEnter" style="margin-top:10px">
             </el-input>
-            <el-alert
+            <!-- <el-alert
                 style="margin-top:8px"
                 title="Form params only, e.g. http://test.com/service/api?api_name=test&api_version=1"
                 :closable=false
                 type="warning">
-            </el-alert>
+            </el-alert> -->
         </el-form-item>
-        <el-form-item label="Output" style="width:800px">
-            <el-input type="textarea" :autosize="{ minRows: 10, maxRows: 50}" placeholder="Test Result" :value="calcResult()" :disabled=true>
+        <el-form-item :label="$t('common.output')" style="width:800px">
+            <el-input type="textarea" :autosize="{ minRows: 15, maxRows: 50}" :placeholder="$t('juz.testResult')" :value="calcResult()" :disabled=true>
             </el-input>
         </el-form-item>
 

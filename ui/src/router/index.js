@@ -55,13 +55,13 @@ export const asyncRouterMap = [
     path: '/adminui/ops',
     component: Layout,
     redirect: '/adminui/ops/service',
-    meta: { title: 'Ops',icon: 'component',noCache: true},
+    meta: { title: 'ops',icon: 'component',noCache: true},
     children: [{
       path: 'service',
       component: () => import('@/views/ops/service'),
       name: 'service',
       meta: {
-        title: 'Service',
+        title: 'service',
         noCache: true
       }
     }, 
@@ -70,7 +70,7 @@ export const asyncRouterMap = [
       component: () => import('@/views/ops/application'),
       name: 'application',
       meta: {
-        title: 'Application',
+        title: 'application',
         noCache: true
       }
     },
@@ -79,7 +79,7 @@ export const asyncRouterMap = [
       component: () => import('@/views/ops/server'),
       name: 'server',
       meta: {
-        title: 'Cloud Server',
+        title: 'cloudserver',
         noCache: true
       }
     }
@@ -89,7 +89,7 @@ export const asyncRouterMap = [
     path: '/adminui/services',
     name: 'services',
     component: Layout,
-    meta: { title: 'Services', icon: 'table', noCache: true },
+    meta: { title: 'services', icon: 'table', noCache: true },
     children: [
       {
         path: 'juz',
@@ -109,34 +109,34 @@ export const asyncRouterMap = [
             path: 'api',
             component: () => import('@/views/services/juz/api'),
             name: 'api',
-            meta: { title: 'API', noCache: true}
+            meta: { title: 'api', noCache: true}
           },
           {
             path: 'strategy',
             component: () => import('@/views/services/juz/strategy'),
             name: 'strategy',
-            meta: { title: 'Strategy', noCache: true}
+            meta: { title: 'strategy', noCache: true}
           },
           { 
             path: 'audit',
             component: () => import('@/views/services/juz/auditLogs'),
             name: 'auditLogs',
             hidden:false,
-            meta: { title: 'Audit logs',  noCache: true}
+            meta: { title: 'auditLogs',  noCache: true}
           },
           { 
             path: 'import',
             component: () => import('@/views/services/juz/import'),
             name: 'import',
             hidden:false,
-            meta: { title: 'Config import',  noCache: true}
+            meta: { title: 'configImport',  noCache: true}
           },
           { 
             path: 'metrics',
             component: () => import('@/views/services/juz/metrics'),
             name: 'metrics',
             hidden:false,
-            meta: { title: 'Metrics',  noCache: true}
+            meta: { title: 'metrics',  noCache: true}
           }
         ]
       }
@@ -149,7 +149,7 @@ export const asyncRouterMap = [
       path: '',
       component: () => import('@/views/users'),
       name: 'users',
-      meta: { title: 'Users', icon: 'user', noCache: true }
+      meta: { title: 'users', icon: 'user', noCache: true }
     }]
   },
   {
@@ -159,7 +159,7 @@ export const asyncRouterMap = [
       path: '',
       component: () => import('@/views/setting'),
       name: 'setting',
-      meta: { title: 'Setting', icon: 'eye', noCache: true }
+      meta: { title: 'setting', icon: 'eye', noCache: true }
     }]
   },
   // {

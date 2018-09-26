@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        <el-tag>service</el-tag>
+        <el-tag>{{$t('common.service')}}</el-tag>
         <el-select  class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="Select a service">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>

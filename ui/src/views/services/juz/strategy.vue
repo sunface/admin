@@ -1,46 +1,46 @@
 <template>
   <div class="app-container">
       <div class="filter-container">
-        <el-tag> service</el-tag>
+        <el-tag> {{$t('common.service')}}</el-tag>
         <el-select clearable class="filter-item" :value="calcService()" @change='handleSelService' style="width: 200px"  placeholder="select a service">
           <el-option v-for="s in  services" :key="s.name" :label="s.name" :value="s.name">
           </el-option>
         </el-select>
-        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"   type="success" icon="el-icon-edit">Add Strategy</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate"   type="success" icon="el-icon-edit">{{$t('juz.addStrategy')}}</el-button>
       </div>
       
       <div class="table">
         <el-table  :data="strategies"  fit highlight-current-row style="width: 100%;" >
-          <el-table-column align="left" label="Type" width="150" prop="name">
+          <el-table-column align="left" :label="$t('common.type')" width="150" prop="name">
             <template slot-scope="scope">
-              <span v-if="scope.row.type==1">White/Black List</span>
-              <span v-if="scope.row.type==2">Timeout/Retry</span>
-              <span v-if="scope.row.type==3">Traffic Controls</span>
+              <span v-if="scope.row.type==1">{{$t('juz.bwList')}}</span>
+              <span v-if="scope.row.type==2">{{$t('juz.timoutRetry')}}</span>
+              <span v-if="scope.row.type==3">{{$t('juz.trafficControl')}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="left" label="Name" width="200" prop="name">
+          <el-table-column align="left" :label="$t('common.name')" width="200" prop="name">
             <template slot-scope="scope">
               <span>{{scope.row.name}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="180" align="left" label="Update Date">
+          <el-table-column width="180" align="left" :label="$t('common.updateDate')">
             <template slot-scope="scope">
               <span>{{scope.row.modify_date}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="150" align="left" label="Status">
+          <el-table-column width="150" align="left" :label="$t('common.status')">
             <template slot-scope="scope">
               <span v-if="scope.row.status==0"><el-tag type="warning" style="border:none;">Off</el-tag></span>
               <span v-else><el-tag type="success" style="border:none;">On</el-tag></span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="Operate" class-name="small-padding fixed-width">
+          <el-table-column align="center" :label="$t('common.operate')" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <span  class="table-op-btn" @click="handleEdit(scope.row)">Edit</span>
-              <span  class="table-op-btn"  @click="handleCopy(scope.row,$event)">CopyConfig</span>
+              <span  class="table-op-btn" @click="handleEdit(scope.row)">{{$t('common.edit')}}</span>
+              <span  class="table-op-btn"  @click="handleCopy(scope.row,$event)">{{$t('common.copyConfig')}}</span>
               <span class="table-op-btn" @click="changeStatus(scope.row)">
-                <span v-if="scope.row.status==0">Start</span>
-                <span v-else>Stop</span>
+                <span v-if="scope.row.status==0">{{$t('common.start')}}</span>
+                <span v-else>{{$t('common.stop')}}</span>
               </span>
               <span  class="table-op-btn" @click="delStrategy(scope.row)">Delete</span>
             </template>
@@ -51,36 +51,36 @@
       <el-dialog  class="mf-dialog" :title="dialogTitle" :visible.sync="bwlistVisible">
         <el-form  label-position="left" label-width="120px" style='width: 650px; margin-left:50px;' size="mini">
             <div class="form-block">
-                <span>Basic</span>
-                <el-form-item label="Strategy Name" style="margin-top:10px">
+                <span>{{$t('juz.basic')}}</span>
+                <el-form-item :label="$t('common.name')" style="margin-top:10px">
                     <el-input  placeholder="" style="width:300px" v-model="tempStrategy.name">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="Type" style="margin-top:10px">
+                <el-form-item :label="$t('common.type')" style="margin-top:10px">
                     <el-radio-group v-model="tempStrategy.type" @change="selType" :disabled="!isCretaeSubmit">
-                        <el-radio :label="1">White/Black List</el-radio>
-                        <el-radio :label="2">Timeout/Retry</el-radio>
-                        <el-radio :label="3">Traffic Control</el-radio>
+                        <el-radio :label="1">{{$t('juz.bwList')}}</el-radio>
+                        <el-radio :label="2">{{$t('juz.timoutRetry')}}</el-radio>
+                        <el-radio :label="3">{{$t('juz.trafficControl')}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
             </div>
             <div class="form-block" v-if="tempStrategy.type==1">
-                <span>White/Black List</span>
-                <el-form-item label="Type" style="margin-top:10px">
+                <span>{{$t('juz.bwList')}}</span>
+                <el-form-item :label="$t('common.type')" style="margin-top:10px">
                     <el-radio-group v-model="tempStrategy.sub_type" >
                         <el-radio :label="1">Black</el-radio>
                         <el-radio :label="2">White</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-alert
+                <!-- <el-alert
                     title="If the list is long ,you can input and save at the the same time"
                     :closable=false
                     type="warning">
-                </el-alert>
-                <el-form-item label="Add" v-if="tempStrategy.sub_type==1 || tempStrategy.sub_type==2" style="margin-top:10px">
+                </el-alert> -->
+                <el-form-item :label="$t('common.add')" v-if="tempStrategy.sub_type==1 || tempStrategy.sub_type==2" style="margin-top:10px">
                     <el-radio-group v-model="selbwType" @change="selBwType">
                         <el-radio :label="1">IP</el-radio>
-                        <el-radio :label="2">Param</el-radio>
+                        <el-radio :label="2">{{$t('common.param')}}</el-radio>
                     </el-radio-group>
                     <div style="margin-top-5">
                         <el-input  placeholder="Key" style="width:80px" v-model="tempBWKey" :disabled="selbwType==1">
@@ -89,8 +89,8 @@
                         </el-input>
                         <el-button @click="addBW" size="mini" icon="el-icon-plus" circle style="margin-left:10px"></el-button>
                     </div>
-                </el-form-item>
-                <el-form-item label="Current List" v-if="tempStrategy.sub_type==1 || tempStrategy.sub_type==2">
+                </el-form-item> 
+                <el-form-item :label="$t('common.currentList')" v-if="tempStrategy.sub_type==1 || tempStrategy.sub_type==2">
                     <div v-for="kv in tempStrategy.content"  :key="kv.key" style="margin-top:-2px">
                         <el-tag type="success" size="large" style="width:70px;border:none;">{{kv.key}}</el-tag>
                         <el-tag type="info" size="large" style="width:200px;border:none">{{kv.val}}</el-tag>
@@ -99,60 +99,55 @@
                 </el-form-item>
             </div>
             <div class="form-block" v-if="tempStrategy.type==2">
-              <span>Request Timeout/Retry</span>
-              <el-form-item label="Timeout(Second)" style="width:200px;margin-top:10px" >
+              <span>{{$t('juz.timoutRetry')}}</span>
+              <el-form-item :label="$t('juz.timeout')" style="width:200px;margin-top:10px" >
                 <el-tooltip content="0<X<=60" placement="top">
                     <el-input-number v-model="tempStrategy.content.req_timeout"  :min="1" :max="60" ></el-input-number>
                 </el-tooltip>
               </el-form-item>
-              <el-form-item label="Retry Times" style="width:200px">
-                <el-tooltip content="When error happens, we will retry after some time" placement="top">
+              <el-form-item  :label="$t('juz.retryTimes')"  style="width:200px">
+                <el-tooltip :content="$t('juz.retryTimesTips')" placement="top">
                     <el-input-number v-model="tempStrategy.content.retry_times"  :min="0" :max="5" ></el-input-number>
                 </el-tooltip>
               </el-form-item>
-              <el-form-item label="Retry Interval" style="width:200px" >
-                <el-tooltip content="the interval when next retry happens, in seconds" placement="top">
+              <el-form-item :label="$t('juz.retryIntv')"  style="width:200px" >
+                <el-tooltip :content="$t('juz.retryIntvTips')" placement="top">
                     <el-input-number v-model="tempStrategy.content.retry_interval"  :min="1" :max="30" ></el-input-number>
                 </el-tooltip>
               </el-form-item>
             </div>
             <div v-if="tempStrategy.type==3">
               <div class="form-block" >
-                  <span>API Traffic</span>
+                  <span>{{$t('juz.trafficControl')}}</span>
                   <el-form-item label="QPS" style="margin-top:10px" >
                       <el-input-number v-model="tempStrategy.content.qps"  :min="0" :max="10000" ></el-input-number>
                       <el-alert
-                          title="Max QPS per second, 0 means no limit"
+                          :title="$t('juz.qpsTips')"
                           :closable=false
                           type="success">
                       </el-alert>
                     </el-form-item>
-                    <el-form-item label="Concurrents">
+                    <el-form-item :label="$t('juz.concurrents')">
                       <el-input-number v-model="tempStrategy.content.concurrent"  :min="0" :max="10000" ></el-input-number>
                       <el-alert
-                          title="Max concurrents per second, 0 means no limit"
+                          :title="$t('juz.concurrentsTips')"
                           :closable=false
                           type="success">
                       </el-alert>
                     </el-form-item>
               </div>
               <div class="form-block" >
-                  <span>User Quota</span>
-                  <el-form-item label="Param" style="margin-top:10px;width:400px" >
-                    <el-input v-model="tempStrategy.content.param" placeholder="empty means no limit"></el-input>
+                  <span>{{$t('juz.userQuota')}}</span>
+                  <el-form-item :label="$t('common.param')" style="margin-top:10px;width:400px" >
+                    <el-input v-model="tempStrategy.content.param" :placeholder="$t('juz.emptyNoLimit')"></el-input>
                   </el-form-item>
-                  <el-form-item label="Time Span">
-                    <el-input-number v-model="tempStrategy.content.span"  :min="2" :max="2592000" ></el-input-number>Second
+                  <el-form-item :label="$t('juz.timeSpan')">
+                    <el-input-number v-model="tempStrategy.content.span"  :min="2" :max="2592000" ></el-input-number>{{$t('common.second')}}
                   </el-form-item>
-                  <el-form-item label="Times">
+                  <el-form-item :label="$t('juz.times')">
                     <el-input-number v-model="tempStrategy.content.times"  :min="1" :max="10240000" ></el-input-number>
                     <el-alert
-                      title="In the limit time span, the value of the param, only be allowed to access limit times"
-                      :closable=false
-                      type="success">
-                    </el-alert>
-                    <el-alert
-                        title="e.g. param=mobile|time span=86400|times=1000, means each mobile number only be allowed to access 1000 times in 86400 seconds"
+                        :title="$t('juz.userQuotaTips')"
                         :closable=false
                         type="success">
                     </el-alert>
@@ -162,12 +157,12 @@
         </el-form>
  
         <div slot="footer" class="dialog-footer">
-          <el-button @click="bwlistVisible=false">Cancel</el-button>
+          <el-button @click="bwlistVisible=false">{{$t('common.cancel')}}</el-button>
           <el-button  type="primary" v-if="isCretaeSubmit" @click="submitStrategy">
-            <span>Submit</span>
+            <span>{{$t('common.submit')}}</span>
           </el-button>
           <el-button  type="primary" v-else @click="submitEdit">
-            <span>Submit</span>
+            <span>{{$t('common.submit')}}</span>
           </el-button>
         </div>
       </el-dialog>
@@ -326,7 +321,7 @@ export default {
     },
     handleEdit(s) {
       this.dialogStatus = 'edit'
-      this.dialogTitle = 'Edit Strategy'
+      this.dialogTitle = this.$t('juz.editStrategy')
       this.tempStrategy = Object.assign({}, s) 
       this.tempStrategy.content = JSON.parse(this.tempStrategy.content)
       this.bwlistVisible = true
@@ -481,7 +476,7 @@ export default {
         return 
       }
       this.dialogStatus = 'create'
-      this.dialogTitle = 'Create Strategy'
+      this.dialogTitle = this.$t('juz.createStrategy')
       this.tempBWKey = 'ip'
 
       this.bwlistVisible = true

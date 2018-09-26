@@ -2,17 +2,17 @@
   <div  :class="{'black-theme':isBlackTheme(),'audit-log':true}">
       <div class="table">
         <el-table  :data="logs"  fit highlight-current-row style="width: 100%;"  :default-sort = "{prop: 'modify_date', order: 'descending'}">
-          <el-table-column align="left" label="Create Date" width="160" prop="modify_date">
+          <el-table-column align="left" :label="$t('common.createDate')" width="160" prop="modify_date">
             <template slot-scope="scope">
               <span>{{scope.row.modify_date}}</span>
             </template>
           </el-table-column>
-         <el-table-column width="100" align="left" label="Target Type">
+         <el-table-column width="100" align="left" :label="$t('common.type')">
             <template slot-scope="scope">
-              <span v-if="scope.row.target_type==1">Service</span>
+              <span v-if="scope.row.target_type==1">{{$t('common.service')}}</span>
               <span v-else-if="scope.row.target_type==2">API</span>
-              <span v-else-if="scope.row.target_type==3">Strategy</span>
-              <span v-else-if="scope.row.target_type==5">Batch Setting</span>
+              <span v-else-if="scope.row.target_type==3">{{$t('juz.strategy')}}</span>
+              <span v-else-if="scope.row.target_type==5">{{$t('juz.strategy')}}</span>
             </template>
           </el-table-column>
           <el-table-column width="250" align="left" label="Target Name(ID)">
@@ -20,7 +20,7 @@
               <span>{{scope.row.target_id}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="150" align="left" label="Content">
+          <el-table-column width="150" align="left" :label="$t('common.content')">
             <template slot-scope="scope">
               <span v-if="scope.row.target_type==1">
                 <span v-if="scope.row.content != ''">{{scope.row.content}}</span>
@@ -44,12 +44,12 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column width="150" align="left" label="Service">
+          <el-table-column width="150" align="left" :label="$t('common.service')">
             <template slot-scope="scope">
               <span>{{scope.row.service}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="150" align="left" label="Operate Type">
+          <el-table-column width="150" align="left" :label="$t('common.operationType')">
             <template slot-scope="scope"> 
               <span v-if="scope.row.op_type==1">Create</span>
               <span v-else-if="scope.row.op_type==2">Edit</span>
@@ -58,14 +58,14 @@
               <span v-else-if="scope.row.op_type==5">Delete</span>
             </template>
           </el-table-column>
-          <el-table-column width="200" align="left" label="Operator" prop="user_id">
+          <el-table-column width="200" align="left" :label="$t('common.operator')" prop="user_id">
             <template slot-scope="scope">
               <span>{{scope.row.user_id}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="Manage" class-name="small-padding fixed-width">
+          <el-table-column align="center" :label="$t('common.manage')" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <span  v-if="scope.row.content!=''" class="table-op-btn"   @click="handleCopy(scope.row.content,$event)">CopyConfig</span>
+              <span  v-if="scope.row.content!=''" class="table-op-btn"   @click="handleCopy(scope.row.content,$event)">{{$t('common.copyConfig')}}</span>
             </template>
           </el-table-column>
         </el-table>

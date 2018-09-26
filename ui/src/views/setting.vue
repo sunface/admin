@@ -2,39 +2,39 @@
   <div class="app-container">
         <el-form  label-position="left" label-width="120px" style="width: 650px;margin-left:15px" size="mini">
             <div class="form-block" style="padding:15px 15px">
-              <el-tag  size="small" style="border:none;font-size:14px">My pw</el-tag>
-              <el-form-item label="old" style="margin-top:25px">
+              <el-tag  size="small" style="border:none;font-size:14px">{{$t('ops.myPW')}}</el-tag>
+              <el-form-item :label="$t('common.old')" style="margin-top:25px">
                 <el-input  v-model="oldPw" placeholder="input the old pw" style="width:250px">
                 </el-input>
-                </el-form-item>
-                    <el-form-item label="new">
-                    <el-input  v-model="newPW1" placeholder="input the new pw" style="width:250px">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="re-new">
+              </el-form-item>
+              <el-form-item :label="$t('common.new')">
+                  <el-input  v-model="newPW1" placeholder="input the new pw" style="width:250px">
+                  </el-input>
+              </el-form-item>
+              <el-form-item :label="$t('common.reInput')">
                 <el-input v-model="newPW2" placeholder="reinput the new pw" style="width:250px">
                 </el-input>
               </el-form-item>
-              <el-button  type="success" size="small" @click="setPW">Submit</el-button>
+              <el-button  type="success" size="small" @click="setPW">{{$t('common.submit')}}</el-button>
             </div>
 
 
             <div class="form-block" style="padding:15px 15px" v-if="priv=='admin' || priv=='super_admin'">
-              <el-tag  size="small" style="border:none;font-size:14px">User's pw</el-tag>
-              <el-form-item label="username" style="margin-top:25px">
-                <el-select class="filter-item" v-model="resetUsername" style="width: 200px"  placeholder="select user" filterable>
+              <el-tag  size="small" style="border:none;font-size:14px">{{$t('ops.userPW')}}</el-tag>
+              <el-form-item :label="$t('common.username')" style="margin-top:25px">
+                <el-select class="filter-item" v-model="resetUsername" style="width: 200px"  :placeholder="$t('common.selectUser')" filterable>
                   <el-option v-for="u in users" :key="u.id" :label="u.username" :value="u.username"></el-option>
                 </el-select>
                 </el-form-item>
-                    <el-form-item label="new">
+                    <el-form-item :label="$t('common.new')">
                     <el-input  v-model="resetPW1" placeholder="input the new pw" style="width:250px">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="re-new">
+                <el-form-item :label="$t('common.reInput')">
                 <el-input v-model="resetPW2" placeholder="reinput the new pw" style="width:250px">
                 </el-input>
               </el-form-item>
-              <el-button  type="success" size="small" @click="setUserPW">Submit</el-button>
+              <el-button  type="success" size="small" @click="setUserPW">{{$t('common.submit')}}</el-button>
             </div>
         </el-form>
   </div>
