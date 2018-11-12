@@ -2,7 +2,6 @@ package admin
 
 import (
 	"fmt"
-	"net/http"
 	"sync"
 	"time"
 
@@ -44,38 +43,38 @@ func (a *Admin) Shutdown() {
 }
 
 func (a *Admin) listen() {
-	go func() {
-		e := echo.New()
-		e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
-			Level: 5,
-		}))
+	// go func() {
+	// 	e := echo.New()
+	// 	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+	// 		Level: 5,
+	// 	}))
 
-		e.Static("/images", "./images")
+	// 	e.Static("/images", "./images")
 
-		e.Static("/adminui", "./ui/dist")
-		e.Static("/lab", "../labsite/dist")
+	// 	e.Static("/adminui", "./ui/dist")
+	// 	e.Static("/lab", "../labsite/dist")
 
-		// 这里把static目录单独独立出来，是为了底下的rewrite不报错
-		e.Static("/adminStatic", "./ui/dist")
-		e.Static("/labStatic", "../labsite/dist")
+	// 	// 这里把static目录单独独立出来，是为了底下的rewrite不报错
+	// 	e.Static("/adminStatic", "./ui/dist")
+	// 	e.Static("/labStatic", "../labsite/dist")
 
-		// 为了让vuejs的mode: history模式下，我们可以访问子路径，这里需要做重写
-		e.Pre(middleware.Rewrite(map[string]string{
-			"/lab/*":     "/lab",
-			"/adminui/*": "/adminui",
-		}))
+	// 	// 为了让vuejs的mode: history模式下，我们可以访问子路径，这里需要做重写
+	// 	e.Pre(middleware.Rewrite(map[string]string{
+	// 		"/lab/*":     "/lab",
+	// 		"/adminui/*": "/adminui",
+	// 	}))
 
-		// 其它路径都路由到/lab
-		e.GET("/", func(c echo.Context) error {
-			fmt.Println(c.Request().Host)
-			return c.Redirect(http.StatusMovedPermanently, "/lab")
-		})
+	// 	// 其它路径都路由到/lab
+	// 	e.GET("/", func(c echo.Context) error {
+	// 		fmt.Println(c.Request().Host)
+	// 		return c.Redirect(http.StatusMovedPermanently, "/lab")
+	// 	})
 
-		e.GET("/:any", func(c echo.Context) error {
-			return c.Redirect(http.StatusMovedPermanently, "/lab")
-		})
-		e.Logger.Fatal(e.Start(":" + misc.Conf.Static.Port))
-	}()
+	// 	e.GET("/:any", func(c echo.Context) error {
+	// 		return c.Redirect(http.StatusMovedPermanently, "/lab")
+	// 	})
+	// 	e.Logger.Fatal(e.Start(":" + misc.Conf.Static.Port))
+	// }()
 
 	e := echo.New()
 	// 设置跨域
