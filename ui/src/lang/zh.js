@@ -9,7 +9,7 @@ export default {
   route: {
     dashboard: '首页',
     ops: '运维管理',
-    services: '应用列表',
+    services: '服务列表',
     strategy: '策略管理',
     api: 'API管理',
     auditLogs: '审计日志',
