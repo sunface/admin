@@ -8,7 +8,7 @@ export default {
   },
   route: {
     dashboard: '首页',
-    ops: '运维管理',
+    ops: '域管理',
     services: '服务列表',
     strategy: '策略管理',
     api: 'API管理',
