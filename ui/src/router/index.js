@@ -78,6 +78,7 @@ export const asyncRouterMap = [
       path: 'server',
       component: () => import('@/views/ops/server'),
       name: 'server',
+      hidden:true,
       meta: {
         title: 'cloudserver',
         noCache: true
