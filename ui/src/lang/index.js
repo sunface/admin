@@ -22,7 +22,7 @@ const messages = {
 const i18n = new VueI18n({ 
   // set locale
   // options: en or zh
-  locale: 'en',
+  locale: 'zh',
   // set locale messages
   messages
 })

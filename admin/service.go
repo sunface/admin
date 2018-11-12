@@ -63,7 +63,7 @@ func (a *Admin) CreateService(c echo.Context) error {
 	service := c.FormValue("service")
 	owner := c.FormValue("owner")
 	desc := c.FormValue("desc")
-	if service == "" || !talent.OnlyAlpha(service) || owner == "" {
+	if service == "" || !talent.OnlyAlphaAndNum(service) || owner == "" {
 		return c.JSON(http.StatusOK, g.Result{
 			Status:  http.StatusBadRequest,
 			ErrCode: g.ParamInvalidC,
