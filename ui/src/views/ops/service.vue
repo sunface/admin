@@ -69,7 +69,7 @@
             </el-input>
           </el-form-item> -->
 
-          <el-form-item label="$t('common.setPriv')">
+          <el-form-item :label="$t('common.setPriv')">
             <el-select class="filter-item" v-model="editServiceUser" style="width: 150px"  :placeholder="$t('common.selectUser')" filterable>
                 <el-option v-for="u in users" :key="u.id" :label="u.username" :value="u.username"></el-option>
             </el-select>
