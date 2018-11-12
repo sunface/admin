@@ -94,7 +94,7 @@ export const asyncRouterMap = [
       {
         path: 'juz',
         name: 'juz',
-        meta: { title: 'Juz.io', noCache: true },
+        meta: { title: 'Api网关', noCache: true },
         component: () => import('@/views/services/juz/index'),
         redirect: '/services/juz/dashboard',
         children: [
