@@ -61,7 +61,7 @@ func (a *Admin) CreateAPP(c echo.Context) error {
 	service := c.FormValue("service")
 	app := c.FormValue("app")
 	desc := c.FormValue("desc")
-	if service == "" || !talent.OnlyAlpha(app) || app == "" {
+	if service == "" || !talent.OnlyAlphaAndNum(app) || app == "" {
 		return c.JSON(http.StatusOK, g.Result{
 			Status:  http.StatusBadRequest,
 			ErrCode: g.ParamInvalidC,
