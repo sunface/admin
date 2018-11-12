@@ -3,14 +3,14 @@
 
     <el-form class="login-form" autoComplete="on" label-position="left">
       <div class="title-container">
-        <h3 class="title">Juz</h3>
+        <h3 class="title">传化网关</h3>
       </div>
 
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" :placeholder="$t('login.username')"
+        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="输入账号"
         />
       </el-form-item>
 
@@ -19,17 +19,17 @@
           <svg-icon icon-class="password" />
         </span>
         <el-input name="password" :type="passwordType" v-model="loginForm.password" autoComplete="on"
-          :placeholder="$t('login.password')" @keyup.enter.native="handleLogin" />
+          placeholder="输入密码" @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width:100%;margin-bottom:30px;"  @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
+      <el-button type="primary" style="width:100%;margin-bottom:30px;"  @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
-        <span>{{$t('login.username')}} : guest</span>
-        <span>{{$t('login.password')}} : guest</span>
+        <span>访客账号 : guest</span>
+        <span>密码 : guest</span>
       </div>
     </el-form>
 
