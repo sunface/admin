@@ -916,6 +916,7 @@ export default {
           var params = {
               target_app: 'juzManage',
               target_path: '/manage/api/offline',
+              target_service: api.service,
               api_id: api.api_id,
           }
           proxy('POST',params).then(res => {
