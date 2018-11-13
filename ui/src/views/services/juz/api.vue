@@ -938,6 +938,7 @@ export default {
         }).then(() => {
           var params = {
               target_app: 'juzManage',
+              target_service: api.service,
               target_path: '/manage/api/release',
               api_id: api.api_id,
           }
