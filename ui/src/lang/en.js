@@ -67,7 +67,8 @@ export default {
     old: 'Old',
     new: 'New',
     reInput: 'Re-input',
-    username: 'user name'
+    username: 'user name',
+    stop: 'Stop'
   },
   ops: {
     addService: 'Create service',

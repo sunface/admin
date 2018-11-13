@@ -42,7 +42,7 @@
                 <span v-if="scope.row.status==0">{{$t('common.start')}}</span>
                 <span v-else>{{$t('common.stop')}}</span>
               </span>
-              <span  class="table-op-btn" @click="delStrategy(scope.row)">Delete</span>
+              <span  class="table-op-btn" @click="delStrategy(scope.row)">{{$t('common.delete')}}</span>
             </template>
           </el-table-column>
         </el-table>

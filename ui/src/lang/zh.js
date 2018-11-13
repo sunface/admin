@@ -67,7 +67,8 @@ export default {
     old: '旧',
     new: '新',
     reInput: '再次输入',
-    username: '用户名'
+    username: '用户名',
+    stop: '停止'
   },
   ops: {
     addService: '创建业务',
