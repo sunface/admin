@@ -74,6 +74,7 @@ func (a *Admin) proxy(c echo.Context) error {
 		appPriv = g.PRIV_GUEST
 	}
 
+	g.L.Debug("user priv", zap.String("service", service), zap.String("user", sess.LoginInfo.Username), zap.String("priv", appPriv))
 	args.Set("app_priv", appPriv)
 
 	req := &fasthttp.Request{}
