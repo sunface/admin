@@ -936,6 +936,7 @@ export default {
           confirmButtonText: 'Submit',
           type: 'info'
         }).then(() => {
+          console.log(api)
           var params = {
               target_app: 'juzManage',
               target_service: api.service,
