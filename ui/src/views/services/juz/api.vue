@@ -1147,6 +1147,7 @@ export default {
       var params = {
           target_app: 'juzManage',
           target_path: '/manage/api/define',
+          target_service: this.tempApi.service,
           api : s,
           action: this.defineStatus
       }
