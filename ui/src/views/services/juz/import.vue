@@ -45,7 +45,8 @@ export default {
             }) 
             return 
           }
-        
+
+          var o = JSON.parse(this.content)
           switch (this.selectedImport) {
               case 2://导入API
                   var action = ''
@@ -53,11 +54,11 @@ export default {
                     // 创建目标，id要重置为0
                     action = 'create'
                   }
-                  var o = JSON.parse(this.content)
                   o.param_rules = JSON.stringify(o.param_rules)
                   var params = {
                         target_app: 'juzManage',
                         target_path: '/manage/api/define',
+                        target_service: o.service,
                         api : o,
                         action: action
                     }
@@ -78,6 +79,7 @@ export default {
                         var params = {
                             target_app: 'juzManage',
                             target_path: '/manage/strategy/create',
+                            target_service: o.service,
                             strategy: this.content
                         }
                         proxy('POST',params).then(res => {
@@ -94,6 +96,7 @@ export default {
                     var params = {
                         target_app: 'juzManage',
                         target_path: '/manage/strategy/update',
+                        target_service: o.service,
                         strategy: this.content
                     }
                     proxy('POST',params).then(res => {
